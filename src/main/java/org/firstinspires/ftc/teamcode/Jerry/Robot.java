@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Jerry;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -13,10 +13,16 @@ public class Robot {
     {
         drive = new DriveTrain(map.dcMotor.get("right"), map.dcMotor.get("left"), true);
         table = new TurnTable(map.dcMotor.get("turn_table"));
+        primary = new Arm(map.dcMotor.get("elbow"), map.servo.get("wrist"), map.servo.get("claw"));
     }
 
     public void update()
     {
         table.update();
+    }
+
+    public void stop()
+    {
+        drive.stop();
     }
 }

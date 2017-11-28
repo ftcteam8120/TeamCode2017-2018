@@ -1,22 +1,17 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Jerry;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.vuforia.MultiTarget;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-@TeleOp(name = "Main Drive")
-public class MainDrive extends OpMode
+@TeleOp(name = "JerryDrive", group = "Jerry")
+public class JerryDrive extends OpMode
 {
-    Robot robot = new Robot();
+    Robot robot;
 
     @Override
     public void init()
     {
+        robot = new Robot();
         robot.init(hardwareMap);
     }
 
@@ -42,6 +37,14 @@ public class MainDrive extends OpMode
 
     public void updateUtility()
     {
+        robot.primary.moveElbow(-gamepad2.left_stick_y);
+        robot.primary.moveWrist(gamepad2.right_stick_y);
+
+        if(gamepad2.a)
+            robot.primary.grab();
+        else if(gamepad2.b)
+            robot.primary.release();
+
         //Check if recall is active and execute
         if(resetToggle)
         {
@@ -68,5 +71,6 @@ public class MainDrive extends OpMode
     {
         telemetry.addData("turn", robot.table.getPosition() + " : " + robot.table.targetPos);
         telemetry.addData("targeting", robot.table.isBusy());
+        telemetry.addData("elbow", robot.primary.elbow.getCurrentPosition());
     }
 }

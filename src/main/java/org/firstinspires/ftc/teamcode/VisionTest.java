@@ -8,8 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import static org.firstinspires.ftc.teamcode.Constants.vuforiaKey;
+import org.firstinspires.ftc.teamcode.Jerry.Constants;
 
 @Autonomous(name = "VisionTest")
 public class VisionTest extends OpMode
@@ -27,7 +26,7 @@ public class VisionTest extends OpMode
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = vuforiaKey;
+        parameters.vuforiaLicenseKey = Constants.vuforiaKey;
         //Choose camera
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
