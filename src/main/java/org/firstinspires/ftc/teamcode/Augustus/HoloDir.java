@@ -8,7 +8,7 @@ public class HoloDir
     public double c;
     public double d;
     public HoloDir(int ax, int bx, int cx, int dx){
-         a=ax;
+        a=ax;
         b=bx;
         c=cx;
         d=dx;
@@ -16,8 +16,8 @@ public class HoloDir
 
     // Constant directional values.
     public static final HoloDir STATIONARY = new HoloDir(0, 0, 0, 0);
-    public static final HoloDir FORWARD = new HoloDir(-1, 1, 1, -1);
     public static final HoloDir BACKWARD = new HoloDir(1, -1, -1, 1);
+    public static final HoloDir FORWARD = new HoloDir(-1, 1, 1, -1);
     public static final HoloDir LEFT = new HoloDir(1, 1, -1, -1);
     public static final HoloDir RIGHT = new HoloDir(-1, -1, 1, 1);
     public static final HoloDir FORWARD_LEFT = new HoloDir(0, 1, 0, -1);

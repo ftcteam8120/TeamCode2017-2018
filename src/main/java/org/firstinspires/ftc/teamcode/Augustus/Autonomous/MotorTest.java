@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Augustus.AutonomousHandler;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
 
-@Autonomous(name = "DirectionTest", group = "Augustus")
-public class DirectionTest extends OpMode
+@Autonomous(name = "MotorTest", group = "Augustus")
+public class MotorTest extends OpMode
 {
     private AutonomousHandler handler;
     private Robot augustus;
@@ -22,6 +22,6 @@ public class DirectionTest extends OpMode
     @Override
     public void loop() {
         augustus.update();
-        handler.dismount(.5);
+        handler.motorTest(.5);
     }
 }

@@ -11,7 +11,7 @@ public class Robot {
 
     public void init(HardwareMap map)
     {
-        drive = new DriveTrain(map.dcMotor.get("right"), map.dcMotor.get("left"), true);
+        drive = new DriveTrain(map.dcMotor.get("right"), map.dcMotor.get("left"), false);
         table = new TurnTable(map.dcMotor.get("turn_table"));
         primary = new Arm(map.dcMotor.get("elbow"), map.servo.get("wrist"), map.servo.get("claw"));
     }
@@ -19,6 +19,7 @@ public class Robot {
     public void update()
     {
         table.update();
+        primary.update();
     }
 
     public void stop()

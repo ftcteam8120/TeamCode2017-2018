@@ -20,8 +20,6 @@ public class TurnTable {
         m.setDirection(DcMotorSimple.Direction.FORWARD);
         m.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //TODO replace encoder cable
-        m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void rotate(double p)

@@ -6,19 +6,19 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class SmartMotor
 {
     private DcMotor motor;
-    private int traveled;
+    private int lastValue;
     private boolean encoders;
 
     public SmartMotor(DcMotor m, boolean e)
     {
         motor = m;
         encoders = e;
-        traveled = 0;
+        lastValue = 0;
     }
 
-    public void init()
+    public void init(DcMotorSimple.Direction dir)
     {
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setDirection(dir);
 
         if(encoders)
         {
@@ -29,20 +29,33 @@ public class SmartMotor
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    /**
+     * Set power of motor.
+     *
+     * @param power What the power gets set to.
+     */
     public void setPower(double power)
     {
         motor.setPower(power);
     }
 
+    /**
+     * Track how much the motor has rotated.
+     *
+     * @return Distance traveled by  encoder.
+     */
     public int getDistanceTraveled()
     {
-        return Math.abs(motor.getCurrentPosition()) - traveled;
+        return Math.abs(lastValue - motor.getCurrentPosition());
     }
 
+    /**
+     * Set va
+     */
     public void reset()
     {
         if(encoders)
-            traveled += getDistanceTraveled();
+            lastValue = motor.getCurrentPosition();
     }
 
 }

@@ -10,6 +10,13 @@ public class Arm {
     public Servo wrist;
     public Servo claw;
 
+    private double wristTarget;
+    private int pivotPosE;
+    private double pivotPosW;
+    private double clawTarget;
+
+    private boolean synced;
+
     public Arm(DcMotor e, Servo w, Servo c)
     {
         elbow = e;
@@ -18,6 +25,8 @@ public class Arm {
         elbow.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         wrist = w;
         claw = c;
+        synced = false;
+        clawTarget = 1.0;
     }
 
     public void moveElbow(double power)
@@ -34,19 +43,54 @@ public class Arm {
 
     public void release()
     {
-        claw.setPosition(180);
+        if(clawTarget < 1)
+            clawTarget += 0.2;
     }
 
     public void grab()
     {
-        claw.setPosition(0);
+        if(clawTarget > 0)
+            clawTarget -= 0.2;
+
     }
 
-    public void moveWrist(double dir)
+    public void sync()
     {
-        if(dir > 0 && wrist.getPosition() < 180)
-            wrist.setPosition(wrist.getPosition() + 1);
-        else if(dir < 0 && wrist.getPosition() > 0)
-            wrist.setPosition(wrist.getPosition() - 1);
+        pivotPosE = elbow.getCurrentPosition();
+        pivotPosW = wrist.getPosition();
+        synced = true;
+    }
+
+    public void wristUp()
+    {
+        if(wristTarget < 1)
+            wristTarget += .01;
+        synced = false;
+    }
+
+    public void wristDown()
+    {
+        if(wristTarget > 0)
+            wristTarget -= .01;
+        synced = false;
+    }
+
+    public void up()
+    {
+        wrist.setPosition(1);
+    }
+
+    public void down()
+    {
+        wrist.setPosition(0);
+    }
+
+    public void update()
+    {
+        if(synced)
+            wristTarget = pivotPosW - ((elbow.getCurrentPosition() - pivotPosE) / 5000.0);
+        wrist.setPosition(wristTarget);
+
+        claw.setPosition(clawTarget);
     }
 }

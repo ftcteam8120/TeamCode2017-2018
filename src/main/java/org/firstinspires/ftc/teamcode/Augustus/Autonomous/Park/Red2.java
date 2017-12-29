@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode.Augustus.Autonomous;
+package org.firstinspires.ftc.teamcode.Augustus.Autonomous.Park;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,8 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Augustus.AutonomousHandler;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
 
-@Autonomous(name = "DirectionTest", group = "Augustus")
-public class DirectionTest extends OpMode
+@Autonomous(name = "Park_Red_2", group = "Augustus")
+public class Red2 extends OpMode
 {
     private AutonomousHandler handler;
     private Robot augustus;
@@ -16,12 +17,12 @@ public class DirectionTest extends OpMode
     public void init() {
         augustus = new Robot();
         augustus.init(hardwareMap, 0);
-        handler = new AutonomousHandler(augustus);
+        handler = new AutonomousHandler(augustus, false, 2);
     }
 
     @Override
     public void loop() {
         augustus.update();
-        handler.dismount(.5);
+        handler.park(.2);
     }
 }

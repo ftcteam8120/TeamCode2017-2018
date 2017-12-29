@@ -20,7 +20,7 @@ public class DriveTrain {
         right = r;
         encoders = e;
         left.setDirection(DcMotorSimple.Direction.FORWARD);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
         stop();
     }
 
