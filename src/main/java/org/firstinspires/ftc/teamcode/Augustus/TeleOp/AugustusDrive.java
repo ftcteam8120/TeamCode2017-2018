@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.Augustus.ClawType;
 import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -17,7 +18,7 @@ public class AugustusDrive extends OpMode
     @Override
     public void init() {
         augustus = new Robot();
-        augustus.init(hardwareMap, 1);
+        augustus.init(hardwareMap, ClawType.J);
         runtime = new ElapsedTime();
         runtime.reset();
     }
@@ -180,11 +181,8 @@ public class AugustusDrive extends OpMode
     {
         telemetry.addData("knocker", augustus.knocker.pos());
         telemetry.addData("encoders", augustus.drive.encoders);
-        telemetry.addData("distance",
-                augustus.drive.a.getDistanceTraveled() + ", " +
-                augustus.drive.b.getDistanceTraveled() + ", " +
-                augustus.drive.c.getDistanceTraveled() + ", " +
-                augustus.drive.d.getDistanceTraveled()
-        );
+
+        if(augustus.right != null)
+            telemetry.addData("color", "b:" + augustus.right.blue() + "; r:" + augustus.right.red());
     }
 }

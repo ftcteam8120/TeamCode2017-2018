@@ -16,8 +16,8 @@ public class Elevator
     private CRServo xR;
     private Claw claw;
 
-    //x moves horizontally
-    //y moves vertically
+    // x moves horizontally
+    // y moves vertically
     public Elevator(boolean e, DcMotor m, CRServo sxL, CRServo sxR, Claw c)
     {
         encoder = e;

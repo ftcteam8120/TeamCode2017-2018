@@ -13,6 +13,7 @@ public class AutonomousHandler {
     //
     private boolean started;
     private ElapsedTime runTime;
+    private double lastTick;
 
     public AutonomousHandler(Robot robot, boolean blue, int section)
     {
@@ -23,6 +24,7 @@ public class AutonomousHandler {
         state = -999;
         runTime = new ElapsedTime();
         started = false;
+        lastTick = 0;
     }
 
     public AutonomousHandler(Robot robot)
@@ -54,13 +56,13 @@ public class AutonomousHandler {
      *
      * Case 0: move forward for 1800 encoder tick.
      *
-     * Case 1: move right if blue is true, left if it's red.
+     * Case 1: move right if blue, left if red.
      *
      * Case 2: Stop robot.
      *
      * @param speed the speed at which the robot moves in all cases.
      */
-    public void park(double speed)
+    public void parkOnly(double speed)
     {
         if(!started) start();
         switch(state)
@@ -78,6 +80,25 @@ public class AutonomousHandler {
             case 2:
                 robot.stop();
                 break;
+        }
+    }
+
+    public void full(double speed)
+    {
+        if(!started) start();
+        switch(state)
+        {
+            case 0:
+                robot.knocker.out();
+                lastTick = runTime.milliseconds();
+                state++;
+                break;
+
+            case 1:
+                if(runTime.milliseconds() >= (lastTick + 500)) state++;
+                break;
+
+
         }
     }
 

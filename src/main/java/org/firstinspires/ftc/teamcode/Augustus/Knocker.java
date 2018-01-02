@@ -18,12 +18,12 @@ public class Knocker
 
     public void out()
     {
-        servo.setPosition(.7);
+        servo.setPosition(0.70);
     }
 
     public void in()
     {
-        servo.setPosition(.1);
+        servo.setPosition(0.04);
     }
 
     public double pos()

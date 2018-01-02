@@ -16,13 +16,13 @@ public class Blue2 extends OpMode
     @Override
     public void init() {
         augustus = new Robot();
-        augustus.init(hardwareMap, 0);
+        augustus.init(hardwareMap, null);
         handler = new AutonomousHandler(augustus, true, 2);
     }
 
     @Override
     public void loop() {
         augustus.update();
-        handler.park(.2);
+        handler.parkOnly(.2);
     }
 }

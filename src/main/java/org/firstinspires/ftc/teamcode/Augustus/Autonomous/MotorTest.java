@@ -15,7 +15,7 @@ public class MotorTest extends OpMode
     @Override
     public void init() {
         augustus = new Robot();
-        augustus.init(hardwareMap, 0);
+        augustus.init(hardwareMap, null);
         handler = new AutonomousHandler(augustus);
     }
 

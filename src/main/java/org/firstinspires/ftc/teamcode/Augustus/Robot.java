@@ -9,12 +9,10 @@ public class Robot
     public Elevator elevator;
     public Knocker knocker;
 
-    public ColorSensor left_back;
-    public ColorSensor left_front;
-    public ColorSensor right_back;
-    public ColorSensor right_front;
+    public ColorSensor right;
+    public ColorSensor left;
 
-    public void init(HardwareMap map, int clawType)
+    public void init(HardwareMap map, ClawType clawType)
     {
         // Map modules
         drive = new DriveTrain(true,
@@ -27,11 +25,16 @@ public class Robot
                 map.dcMotor.get("y"),
                 map.crservo.get("xL"),
                 map.crservo.get("xR"),
-                clawType == 2 ?
+                clawType == ClawType.DOUBLE ?
                         new DoubleClaw(map.servo.get("cL"), map.servo.get("cR"))
                         :
-                        clawType == 1 ?
-                            new SingleClaw(map.servo.get("cM")) : null
+                        clawType == ClawType.SINGLE ?
+                            new SingleClaw(map.servo.get("cM"))
+                            :
+                            clawType == ClawType.J ?
+                                    new JClaw(map.servo.get("cJ"))
+                                    :
+                                    null
         );
         knocker = new Knocker(map.servo.get("k0"));
 
@@ -53,10 +56,8 @@ public class Robot
      */
     public void initSensors(HardwareMap map)
     {
-        left_back = map.colorSensor.get("lb");
-        left_front = map.colorSensor.get("lf");
-        right_back = map.colorSensor.get("rb");
-        right_front = map.colorSensor.get("rf");
+        right = map.colorSensor.get("color");
+        right.enableLed(false);
     }
 
     /**
