@@ -17,7 +17,7 @@ public class Blue2 extends OpMode
     public void init() {
         augustus = new Robot();
         augustus.init(hardwareMap, null);
-        handler = new AutonomousHandler(augustus, true, 2);
+        handler = new AutonomousHandler(augustus, true, 2, telemetry);
     }
 
     @Override

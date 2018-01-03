@@ -11,7 +11,7 @@ public class JClaw implements Claw
     private double p;
     private static final double CLAW_INCREMENT = 0.1;
     private static final double MIN = 0.1;
-    private static final double MAX = 0.95;
+    private static final double MAX = 0.98;
 
     public JClaw(Servo s)
     {

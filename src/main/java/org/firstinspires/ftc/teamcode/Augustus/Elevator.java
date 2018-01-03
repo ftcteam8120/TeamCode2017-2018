@@ -108,7 +108,7 @@ public class Elevator
      */
     public void down()
     {
-        y.setPower(-1);
+        y.setPower(-.5);
     }
 
     /**

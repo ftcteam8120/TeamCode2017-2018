@@ -2,25 +2,53 @@ package org.firstinspires.ftc.teamcode.Augustus;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
 
 public class AutonomousHandler {
 
+    /**
+     * The robot object
+     */
     Robot robot;
+    /**
+     * If the robot is on the blue side or not
+     */
     boolean blue;
+    /**
+     * Which balancing stone the robot is on
+     */
     int section;
+    /**
+     * The current robot state
+     */
     int state;
     //
+    /**
+     * If the auto is started
+     */
     private boolean started;
+    /**
+     * The elapsed time
+     */
     private ElapsedTime runTime;
+    /**
+     * The last tick time
+     */
     private double lastTick;
+    /**
+     * The telemetry handler
+     */
+    private Telemetry telemetry;
 
-    public AutonomousHandler(Robot robot, boolean blue, int section)
+    public AutonomousHandler(Robot robot, boolean blue, int section, Telemetry telemetry)
     {
         this.robot = robot;
         this.blue = blue;
         //relic side = 1; other side = 2;
         this.section = section;
+        this.telemetry = telemetry;
         state = -999;
         runTime = new ElapsedTime();
         started = false;
@@ -29,7 +57,11 @@ public class AutonomousHandler {
 
     public AutonomousHandler(Robot robot)
     {
-        this(robot, false, 0);
+        this(robot, false, 0, null);
+    }
+
+    public AutonomousHandler(Robot robot, Telemetry telemetry) {
+        this(robot, false, 0, telemetry);
     }
 
     public void start(){
@@ -194,5 +226,32 @@ public class AutonomousHandler {
                 robot.stop();
                 break;
         }
+    }
+
+    public void knockerTest(double speed)
+    {
+        if(!started)start();
+        switch(state)
+        {
+            case 0:
+                if(runTime.seconds() > 2) state++;
+                break;
+            case 1:
+                robot.knocker.out();
+                state++;
+                break;
+            case 2:
+                // Display the isRed() boolean value
+                telemetry.addData("Is Red?", robot.knocker.colorRangeSensor.isRed());
+                break;
+        }
+    }
+
+    /**
+     * Update the telemetry values
+     */
+    public void feedback() {
+        // Provide feedback for the knocker's color/range sensor
+        robot.knocker.colorRangeSensor.feedback(telemetry);
     }
 }
