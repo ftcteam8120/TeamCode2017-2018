@@ -87,8 +87,11 @@ public class Arm {
 
     public void update()
     {
+        // Calculation to get new wrist position from elbow position
+        // wrist position = wrist anchor - ((elbow offset) / 5000.0)
         if(synced)
             wristTarget = pivotPosW - ((elbow.getCurrentPosition() - pivotPosE) / 5000.0);
+
         wrist.setPosition(wristTarget);
 
         claw.setPosition(clawTarget);

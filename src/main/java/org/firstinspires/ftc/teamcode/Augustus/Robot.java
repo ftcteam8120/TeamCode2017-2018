@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Augustus;
 //import com.qualcomm.robotcore.hardware.ColorSensor;
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
 
@@ -38,7 +39,7 @@ public class Robot
                             new SingleClaw(map.servo.get("cM"))
                             :
                             clawType == ClawType.J ?
-                                    new JClaw(map.servo.get("cJ"))
+                                    new JClaw(map.dcMotor.get("cJ"))
                                     :
                                     null
         );
@@ -62,6 +63,7 @@ public class Robot
         // Load the right color/range sensor from the hardware map
         LynxI2cColorRangeSensor right_color_range = map.get(LynxI2cColorRangeSensor.class, "right_color_range");
         right = new ColorRangeSensor(right_color_range);
+        right.calibrate();
     }
 
     /**

@@ -4,8 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.teamcode.Augustus.ClawPos;
 import org.firstinspires.ftc.teamcode.Augustus.ClawType;
 import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
+import org.firstinspires.ftc.teamcode.Augustus.JClaw;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -35,12 +37,9 @@ public class AugustusDrive extends OpMode
     //
     double speed;
     //
+    double holoSpeed;
+    //
     double currentTime;
-
-    boolean aLast;
-    boolean aToggle;
-    boolean bLast;
-    boolean bToggle;
 
     @Override
     public void loop() {
@@ -78,10 +77,20 @@ public class AugustusDrive extends OpMode
         // Adjust "safe" perpendicular speed
         if(gamepad.right_trigger > 0)
             // High speed
-            speed = 0.4;
-        else
+            speed = 0.6;
+        else {
             // Low speed
             speed = 0.2;
+        }
+
+        // Set the speed of the normal holomonic drive
+        if (gamepad.right_bumper) {
+            // Half speed
+            holoSpeed = 0.5;
+        } else {
+            // Normal speed
+            holoSpeed = 1.0;
+        }
 
         v = -gamepad.left_stick_y;
         h = gamepad.left_stick_x;
@@ -99,12 +108,11 @@ public class AugustusDrive extends OpMode
         else if(gamepad.dpad_down)
             augustus.drive.setDrive(HoloDir.BACKWARD, speed);
         // Custom direction math
-        else
-        {
-            aPow = -v - h;
-            bPow = v - h;
-            cPow = v + h;
-            dPow = -v + h;
+        else {
+            aPow = (-v - h) * holoSpeed;
+            bPow = (v - h) * holoSpeed;;
+            cPow = (v + h) * holoSpeed;;
+            dPow = (-v + h) * holoSpeed;
             augustus.drive.setDrive(aPow, bPow, cPow, dPow);
         }
     }
@@ -123,16 +131,28 @@ public class AugustusDrive extends OpMode
      */
     public void updateUtility(Gamepad gamepad)
     {
-        // Check if claw is due to move and move it accordingly
-        if(aToggle)
-        {
-            aToggle = false;
-            augustus.elevator.grab(true);
+        // Override the claw position manually
+        if (gamepad.left_bumper) {
+            augustus.elevator.claw.release(false);
+        } else if (gamepad.right_bumper) {
+            augustus.elevator.claw.grab(false);
         }
-        else if(bToggle)
-        {
-            bToggle = false;
-            augustus.elevator.release(true);
+
+        // Move the claw to predefined positions
+        if (gamepad.left_trigger > 0.5) {
+            augustus.elevator.claw.release(true);
+        } else if (gamepad.right_trigger > 0.5) {
+            augustus.elevator.claw.grab(true);
+        } else {
+            augustus.elevator.claw.stop();
+        }
+
+        // Loading button
+        if (gamepad.a) {
+            // When a is clicked, move the claw to the load position to load the claw arms
+            if (augustus.elevator.claw instanceof JClaw) {
+                ((JClaw)augustus.elevator.claw).setPosition(ClawPos.LOAD);
+            }
         }
 
         // Knock
@@ -162,16 +182,6 @@ public class AugustusDrive extends OpMode
         // Check time since rail activation, stop if necessary
         if(runtime.milliseconds() > currentTime + 500)
             augustus.elevator.stopPosition();
-
-        // Check last button states for flag toggles
-        if(!gamepad.a && aLast)
-            aToggle = true;
-        if(!gamepad.b && bLast)
-            bToggle = true;
-
-        // Get last state of buttons
-        aLast = gamepad.a;
-        bLast = gamepad.b;
     }
 
     /**
@@ -181,8 +191,8 @@ public class AugustusDrive extends OpMode
     {
         telemetry.addData("knocker", augustus.knocker.pos());
         telemetry.addData("encoders", augustus.drive.encoders);
-
         if(augustus.right != null)
             telemetry.addData("color", "b:" + augustus.right.blue() + "; r:" + augustus.right.red());
+        augustus.elevator.claw.feedback(telemetry);
     }
 }

@@ -14,7 +14,7 @@ public class Elevator
     private DcMotor y;
     private CRServo xL;
     private CRServo xR;
-    private Claw claw;
+    public Claw claw;
 
     // x moves horizontally
     // y moves vertically

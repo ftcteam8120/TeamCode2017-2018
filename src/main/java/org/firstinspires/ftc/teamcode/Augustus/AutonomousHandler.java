@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.Augustus;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Augustus.Robot;
 
 public class AutonomousHandler {
 
@@ -15,11 +13,11 @@ public class AutonomousHandler {
     /**
      * If the robot is on the blue side or not
      */
-    boolean blue;
+    Side side;
     /**
      * Which balancing stone the robot is on
      */
-    int section;
+    Section section;
     /**
      * The current robot state
      */
@@ -37,31 +35,20 @@ public class AutonomousHandler {
      * The last tick time
      */
     private double lastTick;
-    /**
-     * The telemetry handler
-     */
-    private Telemetry telemetry;
 
-    public AutonomousHandler(Robot robot, boolean blue, int section, Telemetry telemetry)
+    public AutonomousHandler(Robot robot, Side side, Section section)
     {
         this.robot = robot;
-        this.blue = blue;
-        //relic side = 1; other side = 2;
+        this.side = side;
         this.section = section;
-        this.telemetry = telemetry;
         state = -999;
         runTime = new ElapsedTime();
         started = false;
         lastTick = 0;
     }
 
-    public AutonomousHandler(Robot robot)
-    {
-        this(robot, false, 0, null);
-    }
-
-    public AutonomousHandler(Robot robot, Telemetry telemetry) {
-        this(robot, false, 0, telemetry);
+    public AutonomousHandler(Robot robot) {
+        this(robot, null, null);
     }
 
     public void start(){
@@ -74,9 +61,8 @@ public class AutonomousHandler {
     {
         state++;
         robot.stop();
+        lastTick = runTime.milliseconds();
     }
-
-
 
     //  7:^]
     //  ROUTINES
@@ -106,7 +92,7 @@ public class AutonomousHandler {
 
             case 1:
                 if(robot.drive.a.getDistanceTraveled() > 800) next();
-                robot.drive.setDrive((blue ? HoloDir.RIGHT : HoloDir.LEFT), speed);
+                robot.drive.setDrive(((side == Side.BLUE) ? HoloDir.RIGHT : HoloDir.LEFT), speed);
                 break;
 
             case 2:
@@ -187,19 +173,19 @@ public class AutonomousHandler {
     }
 
     /**
-     * Run each motor for one second to test them.
+     * Run each motor for one second to test them in the proper A B C D order.
      *
-     * Case 0: runs motor a for 1 second.
+     * Case 0: runs motor A for 1 second.
      *
-     * Case 1: runs motor b for 1 second.
+     * Case 1: runs motor B for 1 second.
      *
-     * Case 2: runs motor c for 1 second.
+     * Case 2: runs motor C for 1 second.
      *
-     * Case 3: runs motor d for 1 second.
+     * Case 3: runs motor D for 1 second.
      *
      * Case 4: stops robot.
      *
-     * @param speed the speed at whihc all motors are run at.
+     * @param speed the speed at which all motors are run at.
      */
     public void motorTest(double speed)
     {
@@ -228,30 +214,181 @@ public class AutonomousHandler {
         }
     }
 
-    public void knockerTest(double speed)
+    public void knock()
     {
-        if(!started)start();
+        if(!started) start();
         switch(state)
         {
             case 0:
-                if(runTime.seconds() > 2) state++;
+                robot.knocker.out();
+                break;
+        }
+    }
+
+    // Autonomous constant values
+    final double KNOCK_POWER = 0.4;
+    final double AUTO_POWER = 1;
+    final double ROTATE_POWER = 0.55;
+
+    /**
+     * Autonomous for the further two balancing stones
+     */
+    public void Auto1SectionOne()
+    {
+        if(!started) start();
+
+        switch (state)
+        {
+            case 0:
+                // Extend the knocker
+                robot.knocker.out();
+                next();
                 break;
             case 1:
-                robot.knocker.out();
-                state++;
+                // Actually detect the color of the jewel and knock
+                // Spend 0.5s knocking the jewel off the platform
+                if(runTime.milliseconds() >= (lastTick + 500)) next();
+                if((side == Side.BLUE && robot.knocker.colorRangeSensor.isRed())
+                        || (side == Side.RED && !robot.knocker.colorRangeSensor.isRed()))
+                    robot.drive.setAllDrive(KNOCK_POWER);
+                else
+                    robot.drive.setAllDrive(-KNOCK_POWER);
                 break;
             case 2:
-                // Display the isRed() boolean value
-                telemetry.addData("Is Red?", robot.knocker.colorRangeSensor.isRed());
+                // Move back to the base position
+                // Spend 500 ms doing this
+                if(runTime.milliseconds() >= (lastTick + 500)) next();
+                if(robot.drive.a.getDistanceTraveled() > 0)
+                    robot.drive.setAllDrive(-KNOCK_POWER);
+                else
+                    robot.drive.setAllDrive(KNOCK_POWER);
+                break;
+            case 3:
+                // Pull the knocker in
+                robot.knocker.in();
+                next();
+                break;
+            case 4:
+                if (side == Side.BLUE) {
+                    // Move backwards for 3s
+                    if(runTime.milliseconds() >= (lastTick + 3000)) next();
+                    robot.drive.setDrive(HoloDir.BACKWARD, AUTO_POWER);
+                } else {
+                    // Move forwards for 3s
+                    if(runTime.milliseconds() >= (lastTick + 3000)) next();
+                    robot.drive.setDrive(HoloDir.FORWARD, AUTO_POWER);
+                }
+                break;
+            case 5:
+                if(runTime.milliseconds() >= (lastTick + 2000)) next();
+                if (side == Side.BLUE) {
+                    // Move left for 2s
+                    robot.drive.setDrive(HoloDir.LEFT, AUTO_POWER);
+                } else {
+                    // Move right for 2s
+                    robot.drive.setDrive(HoloDir.RIGHT, AUTO_POWER);
+                }
+                break;
+            case 6:
+                if(runTime.milliseconds() >= (lastTick + 500)) next();
+                if (side == Side.BLUE) {
+                    // Rotate the robot right to turn toward the cryptobox
+                    robot.drive.setAllDrive(ROTATE_POWER);
+                } else {
+                    // Rotate the robot left to turn toward the cryptobox
+                    robot.drive.setAllDrive(-ROTATE_POWER);
+                }
+                break;
+            case 7:
+                // Extend the elevator for 1s
+                if(runTime.milliseconds() >= (lastTick + 1000)) next();
+                robot.elevator.out();
+                break;
+            case 8:
+                // Stop the elevator from moving
+                robot.elevator.stop();
+                next();
+                break;
+            case 9:
+                // Release the glyph and slowly back up for 1.5s
+                if(runTime.milliseconds() >= (lastTick + 1500)) next();
+                robot.elevator.claw.release(false);
+                robot.drive.setDrive(HoloDir.BACKWARD, 0.15);
+                break;
+            case 10:
+                robot.stop();
                 break;
         }
     }
 
     /**
-     * Update the telemetry values
+     * Autonomous for the closer two balancing stones
      */
-    public void feedback() {
-        // Provide feedback for the knocker's color/range sensor
-        robot.knocker.colorRangeSensor.feedback(telemetry);
+    public void Auto1SectionTwo() {
+        if (!started) start();
+        switch (state) {
+            case 0:
+                robot.knocker.out();
+                next();
+                break;
+            case 1:
+                // Actually detect the color of the jewel and knock
+                // Spend 0.5s knocking the jewel off the platform
+                if(runTime.milliseconds() >= (lastTick + 500)) next();
+                if((side == Side.BLUE && robot.knocker.colorRangeSensor.isRed())
+                        || (side == Side.RED && !robot.knocker.colorRangeSensor.isRed()))
+                    robot.drive.setAllDrive(KNOCK_POWER);
+                else
+                    robot.drive.setAllDrive(-KNOCK_POWER);
+                break;
+            case 2:
+                // Move back to the base position
+                // Spend 0.5s doing this
+                if(runTime.milliseconds() >= (lastTick + 500)) next();
+                if(robot.drive.a.getDistanceTraveled() > 0)
+                    robot.drive.setAllDrive(-KNOCK_POWER);
+                else
+                    robot.drive.setAllDrive(KNOCK_POWER);
+                break;
+            case 3:
+                // Pull the knocker in
+                robot.knocker.in();
+                next();
+                break;
+            case 4:
+                // Move backwards for 3s
+                if(runTime.milliseconds() >= (lastTick + 3000)) next();
+                if(side == Side.BLUE) {
+                    robot.drive.setDrive(HoloDir.BACKWARD, AUTO_POWER);
+                } else {
+                    robot.drive.setDrive(HoloDir.FORWARD, AUTO_POWER);
+                }
+                break;
+            case 5:
+                // Rotate the robot to turn toward the cryptobox
+                if(runTime.milliseconds() >= (lastTick + 500)) next();
+                robot.drive.setAllDrive(-ROTATE_POWER);
+                break;
+            case 6:
+                // Extend the elevator for 1s
+                if(runTime.milliseconds() >= (lastTick + 1000)) next();
+                robot.elevator.out();
+                break;
+            case 7:
+                // Stop the elevator from moving
+                robot.elevator.stop();
+                next();
+                break;
+            case 8:
+                // Release the glyph and slowly back up for 1.5s
+                if(runTime.milliseconds() >= (lastTick + 1500)) next();
+                robot.elevator.claw.release(false);
+                robot.drive.setDrive(HoloDir.BACKWARD, 0.15);
+                break;
+            case 9:
+                robot.stop();
+                break;
+        }
     }
+
 }

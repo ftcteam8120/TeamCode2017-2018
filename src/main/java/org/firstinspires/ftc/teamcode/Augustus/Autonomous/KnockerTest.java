@@ -17,12 +17,13 @@ public class KnockerTest extends OpMode
         augustus = new Robot();
         augustus.init(hardwareMap, null);
         augustus.knocker.colorRangeSensor.calibrate();
-        handler = new AutonomousHandler(augustus, telemetry);
+        handler = new AutonomousHandler(augustus);
     }
 
     @Override
     public void loop() {
-        handler.knockerTest(1);
-        handler.feedback();
+        augustus.update();
+        handler.knock();
+        augustus.knocker.colorRangeSensor.feedback(telemetry);
     }
 }

@@ -8,7 +8,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 /**
  * Wrapper class for the LynxI2cColorRangeSensor
  */
-public class ColorRangeSensor {
+public class ColorRangeSensor
+{
 
     public ColorRangeSensor(LynxI2cColorRangeSensor sensor) {
         this.sensor = sensor;
@@ -80,14 +81,6 @@ public class ColorRangeSensor {
      */
     public boolean isRed() {
         return this.red() > this.blue();
-    }
-
-    /**
-     * Determines if the blue jewel is detected
-     * @return if it is blue
-     */
-    public boolean isBlue() {
-        return !this.isRed();
     }
 
     /**

@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.Augustus;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class DoubleClaw implements Claw
 {
@@ -58,6 +61,9 @@ public class DoubleClaw implements Claw
         }
     }
 
+    @Override
+    public void stop() {}
+
     /**
      * Assign updated position for Double Claw.
      */
@@ -67,4 +73,6 @@ public class DoubleClaw implements Claw
         cL.setPosition(1.0 - clawPos);
         cR.setPosition(clawPos);
     }
+
+    public void feedback(Telemetry telemetry) {}
 }

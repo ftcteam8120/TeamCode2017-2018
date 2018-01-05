@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Augustus;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class SingleClaw implements Claw
 {
     private Servo c;
@@ -56,6 +58,9 @@ public class SingleClaw implements Claw
         }
     }
 
+    @Override
+    public void stop() {}
+
     /**
      * Assign updated position of Single Claw.
      */
@@ -64,4 +69,7 @@ public class SingleClaw implements Claw
     {
         c.setPosition(clawPos);
     }
+
+    @Override
+    public void feedback(Telemetry telemetry) {}
 }

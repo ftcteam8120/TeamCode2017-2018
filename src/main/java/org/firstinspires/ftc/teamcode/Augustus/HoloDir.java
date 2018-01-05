@@ -24,5 +24,8 @@ public class HoloDir
     public static final HoloDir BACKWARD_LEFT = new HoloDir(0.75, 0, -0.75, 0);
     public static final HoloDir FORWARD_RIGHT = new HoloDir(-0.75, 0, 0.75, 0);
     public static final HoloDir BACKWARD_RIGHT = new HoloDir(0, -0.75, 0, 0.75);
+    // Rotation directional value
+    //public static final HoloDir ROTATE_RIGHT = new HoloDir(0.75, 0.75, 0.75, 0.75);
+    //public static final HoloDir ROTATE_LEFT = new HoloDir(-0.75, -0.75, -0.75, -0.75);
 
 }

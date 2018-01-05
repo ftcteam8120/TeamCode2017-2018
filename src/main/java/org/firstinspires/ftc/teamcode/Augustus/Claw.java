@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Augustus;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public interface Claw
 {
     /**
@@ -16,8 +18,12 @@ public interface Claw
      */
     void release(boolean override);
 
+    void stop();
+
     /**
      * Abstract update method
      */
     void update();
+
+    void feedback(Telemetry telemetry);
 }
