@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.Augustus;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class DriveTrain
-{
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import static org.firstinspires.ftc.teamcode.QuickMaths.*;
+
+public class DriveTrain implements Module {
     public boolean encoders;
 
     public SmartMotor a;
@@ -79,6 +82,40 @@ public class DriveTrain
     {
         setDrive(dir.a*pow,dir.b*pow,dir.c*pow,dir.d*pow);
     }
+
+    /**
+     *
+     * @param angle the angle of the stick
+     * @param pow the power which all motors are set
+     */
+    public void setDrive(double angle, double pow)
+    {
+        if(isBetween(angle, 22.5, 67.5, true))
+            setDrive(HoloDir.FORWARD_RIGHT, pow);
+        else if(isBetween(angle, 67.5, 112.5, true))
+            setDrive(HoloDir.RIGHT, pow);
+        else if(isBetween(angle, 112.5, 157.5, true))
+            setDrive(HoloDir.BACKWARD_RIGHT, pow);
+        else if(isBetween(angle, 157.5, 202.5, true))
+            setDrive(HoloDir.BACKWARD, pow);
+        else if(isBetween(angle, 202.5, 247.5, true))
+            setDrive(HoloDir.BACKWARD_LEFT, pow);
+        else if(isBetween(angle, 247.5, 292.5, true))
+            setDrive(HoloDir.LEFT, pow);
+        else if(isBetween(angle, 292.5, 337.5, true))
+            setDrive(HoloDir.FORWARD_LEFT, pow);
+        else
+            setDrive(HoloDir.FORWARD, pow);
+    }
+
+    public void update() {
+        // Not yet implemented
+    }
+
+    public void feedback(Telemetry telemetry) {
+        telemetry.addData("Drive Encoders", this.encoders);
+    }
+
 
 
 }

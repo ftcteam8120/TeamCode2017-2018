@@ -21,6 +21,10 @@ public class DoubleClaw implements Claw
         clawPos = 0.0;
     }
 
+    public void init() {
+        // Nothing to do here
+    }
+
     /**
      * Close Double Claw.
      *

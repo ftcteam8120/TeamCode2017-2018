@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Robot
 {
     public DriveTrain drive;
@@ -30,8 +32,7 @@ public class Robot
         );
         elevator = new Elevator(true,
                 map.dcMotor.get("y"),
-                map.crservo.get("xL"),
-                map.crservo.get("xR"),
+                map.dcMotor.get("x"),
                 clawType == ClawType.DOUBLE ?
                         new DoubleClaw(map.servo.get("cL"), map.servo.get("cR"))
                         :
@@ -58,8 +59,7 @@ public class Robot
      *
      * @param map Hardware map for robot.
      */
-    public void initSensors(HardwareMap map)
-    {
+    public void initSensors(HardwareMap map) {
         // Load the right color/range sensor from the hardware map
         LynxI2cColorRangeSensor right_color_range = map.get(LynxI2cColorRangeSensor.class, "right_color_range");
         right = new ColorRangeSensor(right_color_range);
@@ -69,17 +69,21 @@ public class Robot
     /**
      * Run internal checks on modules
      */
-    public void update()
-    {
+    public void update() {
         elevator.update();
     }
 
     /**
      * Stop all components of the robot.
      */
-    public void stop()
-    {
+    public void stop() {
         drive.stop();
         elevator.stop();
+    }
+
+    public void feedback(Telemetry telemetry) {
+        this.drive.feedback(telemetry);
+        this.knocker.feedback(telemetry);
+        this.elevator.feedback(telemetry);
     }
 }

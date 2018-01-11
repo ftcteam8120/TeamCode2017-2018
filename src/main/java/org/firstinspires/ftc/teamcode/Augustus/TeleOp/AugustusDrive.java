@@ -9,7 +9,12 @@ import org.firstinspires.ftc.teamcode.Augustus.ClawType;
 import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
 import org.firstinspires.ftc.teamcode.Augustus.JClaw;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
+
+import static org.firstinspires.ftc.teamcode.QuickMaths.*;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import static org.firstinspires.ftc.teamcode.QuickMaths.normalize;
 
 @TeleOp(name = "AugustusDrive", group = "Augustus")
 public class AugustusDrive extends OpMode
@@ -27,6 +32,7 @@ public class AugustusDrive extends OpMode
 
     double v;
     double h;
+    double angle;
     //
     double aPow;
     double bPow;
@@ -68,8 +74,7 @@ public class AugustusDrive extends OpMode
      *
      * @param gamepad gamepad used for controlling drivetrain components.
      */
-    public void updateDriver(Gamepad gamepad)
-    {
+    public void updateDriver(Gamepad gamepad) {
         // Reset encoders
         if(gamepad.b)
             augustus.stop();
@@ -83,10 +88,10 @@ public class AugustusDrive extends OpMode
             speed = 0.2;
         }
 
-        // Set the speed of the normal holomonic drive
+        // Set the speed of the normal holo drive
         if (gamepad.right_bumper) {
-            // Half speed
-            holoSpeed = 0.5;
+            // Quarter speed
+            holoSpeed = 0.25;
         } else {
             // Normal speed
             holoSpeed = 1.0;
@@ -98,7 +103,7 @@ public class AugustusDrive extends OpMode
 
         // Directional assist
         if(rotate != 0)
-            augustus.drive.setAllDrive(rotate);
+            augustus.drive.setAllDrive(rotate * holoSpeed);
         else if(gamepad.dpad_right)
             augustus.drive.setDrive(HoloDir.RIGHT, speed);
         else if(gamepad.dpad_left)
@@ -107,13 +112,56 @@ public class AugustusDrive extends OpMode
             augustus.drive.setDrive(HoloDir.FORWARD, speed);
         else if(gamepad.dpad_down)
             augustus.drive.setDrive(HoloDir.BACKWARD, speed);
-        // Custom direction math
         else {
+            //
+            if(v == 0 && h == 0)
+                augustus.drive.setAllDrive(0);
+            else if(v == 0)
+            {
+                if(h > 0)
+                    augustus.drive.setDrive(HoloDir.RIGHT, holoSpeed);
+                else
+                    augustus.drive.setDrive(HoloDir.LEFT, holoSpeed);
+            }
+            else if(h == 0)
+            {
+                if(v > 0)
+                    augustus.drive.setDrive(HoloDir.FORWARD, holoSpeed);
+                else
+                    augustus.drive.setDrive(HoloDir.BACKWARD, holoSpeed);
+            }
+            else
+            {
+                if(h > 0)
+                {
+                    if(v > 0)
+                    {
+                        //Quadrant 1
+                        angle = (Math.atan(v / h) * 180 / Math.PI);
+                    }
+                    else
+                    {
+                        //Quadrant 4
+                        angle = (Math.atan(v / h) * 180 / Math.PI) + 360;
+                    }
+                }
+                else
+                {
+                    //Quadrants 2 & 3
+                    angle = (Math.atan(v / h) * 180 / Math.PI) + 180;
+                }
+                augustus.drive.setDrive(normalize(90 - angle), holoSpeed);
+            }
+            //
+
+
+            /* Old fluid movement code
             aPow = (-v - h) * holoSpeed;
             bPow = (v - h) * holoSpeed;;
             cPow = (v + h) * holoSpeed;;
             dPow = (-v + h) * holoSpeed;
             augustus.drive.setDrive(aPow, bPow, cPow, dPow);
+            */
         }
     }
 
@@ -129,30 +177,14 @@ public class AugustusDrive extends OpMode
      *
      * @param gamepad gamepad used for controlling non drivetrain components.
      */
-    public void updateUtility(Gamepad gamepad)
-    {
-        // Override the claw position manually
-        if (gamepad.left_bumper) {
-            augustus.elevator.claw.release(false);
-        } else if (gamepad.right_bumper) {
-            augustus.elevator.claw.grab(false);
-        }
+    public void updateUtility(Gamepad gamepad) {
 
-        // Move the claw to predefined positions
         if (gamepad.left_trigger > 0.5) {
             augustus.elevator.claw.release(true);
         } else if (gamepad.right_trigger > 0.5) {
             augustus.elevator.claw.grab(true);
         } else {
             augustus.elevator.claw.stop();
-        }
-
-        // Loading button
-        if (gamepad.a) {
-            // When a is clicked, move the claw to the load position to load the claw arms
-            if (augustus.elevator.claw instanceof JClaw) {
-                ((JClaw)augustus.elevator.claw).setPosition(ClawPos.LOAD);
-            }
         }
 
         // Knock
@@ -162,37 +194,37 @@ public class AugustusDrive extends OpMode
             augustus.knocker.in();
 
         // Check if elevator motor should be on
+        // Negative is down and positive is up
         if(gamepad.left_stick_y > 0.5)
-            augustus.elevator.up();
-        else if(gamepad.left_stick_y < -0.5)
             augustus.elevator.down();
+        else if(gamepad.left_stick_y < -0.5)
+            augustus.elevator.up();
         else
-            augustus.elevator.stop();
+            augustus.elevator.stopVert();
+
+        if (gamepad.dpad_up) {
+            augustus.elevator.out(false);
+        } else if (gamepad.dpad_down) {
+            augustus.elevator.in(false);
+        }
 
         // Activate rails
+        // Negative is up and positive is down
         if(gamepad.right_stick_y > 0.5) {
-            currentTime = runtime.milliseconds();
-            augustus.elevator.out();
+            augustus.elevator.in(true);
         }
         else if (gamepad.right_stick_y < -0.5) {
-            currentTime = runtime.milliseconds();
-            augustus.elevator.in();
+            augustus.elevator.out(true);
+        } else {
+            augustus.elevator.stopHoriz();
         }
-
-        // Check time since rail activation, stop if necessary
-        if(runtime.milliseconds() > currentTime + 500)
-            augustus.elevator.stopPosition();
     }
 
     /**
      * Print various telemetry data to the screen
      */
-    public void feedback()
-    {
-        telemetry.addData("knocker", augustus.knocker.pos());
-        telemetry.addData("encoders", augustus.drive.encoders);
-        if(augustus.right != null)
-            telemetry.addData("color", "b:" + augustus.right.blue() + "; r:" + augustus.right.red());
-        augustus.elevator.claw.feedback(telemetry);
+    public void feedback() {
+        //augustus.feedback(telemetry);
+        telemetry.addData("stick angle", normalize(90 - angle));
     }
 }

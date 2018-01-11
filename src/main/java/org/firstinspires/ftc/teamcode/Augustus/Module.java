@@ -2,20 +2,12 @@ package org.firstinspires.ftc.teamcode.Augustus;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public interface Claw {
-    /**
-     * Abstract Grab method
-     *
-     * @param override Is override mode enabled?
-     */
-    void grab(boolean override);
-
-    /**
-     * Abstract release method
-     *
-     * @param override Is override mode enabled?
-     */
-    void release(boolean override);
+/**
+ * The module interface is the basis for all robot modules
+ * each module extends the class and is required to have all of its
+ * abstract functions.
+ */
+public interface Module {
 
     /**
      * All modules must have a default init function to initialize them properly
@@ -37,4 +29,5 @@ public interface Claw {
      * @param telemetry
      */
     void feedback(Telemetry telemetry);
+
 }

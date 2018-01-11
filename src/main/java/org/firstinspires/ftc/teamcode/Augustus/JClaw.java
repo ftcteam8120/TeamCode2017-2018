@@ -11,16 +11,17 @@ public class JClaw implements Claw
 {
     private DcMotor motor;
     //position of servo
-    private ClawPos p = ClawPos.STOPPED;
+    public ClawPos p;
 
-    //encoder threshold
-    private static final int THRESH = 50;
-
-    public JClaw(DcMotor m)
-    {
+    public JClaw(DcMotor m) {
         motor = m;
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        p = ClawPos.STOPPED;
+    }
+
+    public void init() {
+        // Nothing to do here
     }
 
     /**
@@ -35,9 +36,9 @@ public class JClaw implements Claw
     public void grab(boolean override) {
         if (override) {
             this.motor.setPower(1);
-            p = ClawPos.OVERRIDE;
+            this.p = ClawPos.OVERRIDE;
         } else {
-            p = ClawPos.CLOSED;
+            this.p = ClawPos.CLOSED;
         }
     }
 
@@ -53,9 +54,9 @@ public class JClaw implements Claw
     public void release(boolean override) {
         if (override) {
             this.motor.setPower(-1);
-            p = ClawPos.OVERRIDE;
+            this.p = ClawPos.OVERRIDE;
         } else {
-            p = ClawPos.OPEN;
+            this.p = ClawPos.OPEN;
         }
     }
 
@@ -64,7 +65,7 @@ public class JClaw implements Claw
      */
     @Override
     public void stop() {
-        this.motor.setPower(0);
+        this.p = ClawPos.STOPPED;
     }
 
     /**
@@ -81,7 +82,7 @@ public class JClaw implements Claw
                 }
                 break;
             case OPEN:
-                if (motor.getCurrentPosition() < -7300) {
+                if (motor.getCurrentPosition() < -4400) {
                     this.p = ClawPos.STOPPED;
                 } else {
                     this.motor.setPower(-1);
@@ -128,7 +129,7 @@ public class JClaw implements Claw
     }
 
     public void feedback(Telemetry telemetry) {
-        telemetry.addData("Claw:", motor.getCurrentPosition());
-        telemetry.addData("Claw State:", this.getClawStateString());
+        telemetry.addData("Claw Pos", motor.getCurrentPosition());
+        telemetry.addData("Claw State", this.getClawStateString());
     }
 }

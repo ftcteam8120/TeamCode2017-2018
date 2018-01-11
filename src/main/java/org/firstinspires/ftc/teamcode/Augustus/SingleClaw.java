@@ -5,17 +5,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class SingleClaw implements Claw
-{
+public class SingleClaw implements Claw {
     private Servo c;
 
     private double clawPos;
     private static final double CLAW_INCREMENT = 0.1;
 
-    public SingleClaw(Servo sc)
-    {
+    public SingleClaw(Servo sc) {
         c = sc;
         clawPos = 0.2;
+    }
+
+    public void init() {
+        // Nothing to do here
     }
 
     /**

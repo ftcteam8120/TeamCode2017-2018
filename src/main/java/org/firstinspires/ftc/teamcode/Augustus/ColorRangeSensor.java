@@ -8,8 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 /**
  * Wrapper class for the LynxI2cColorRangeSensor
  */
-public class ColorRangeSensor
-{
+public class ColorRangeSensor {
 
     public ColorRangeSensor(LynxI2cColorRangeSensor sensor) {
         this.sensor = sensor;
