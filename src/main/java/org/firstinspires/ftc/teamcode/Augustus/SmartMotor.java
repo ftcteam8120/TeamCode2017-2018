@@ -50,7 +50,7 @@ public class SmartMotor
     }
 
     /**
-     * Set va
+     * Set value to the last known motor position
      */
     public void reset()
     {

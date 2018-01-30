@@ -78,5 +78,8 @@ public class DoubleClaw implements Claw
         cR.setPosition(clawPos);
     }
 
+    public void clinch(){
+
+    }
     public void feedback(Telemetry telemetry) {}
 }

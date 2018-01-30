@@ -16,7 +16,8 @@ public class Robot
     public Knocker knocker;
 
     public ColorRangeSensor right;
-    // public ColorRangeSensor left;
+
+    public Grabber grabber;
 
     public void init(HardwareMap map, ClawType clawType)
     {
@@ -30,6 +31,7 @@ public class Robot
             map.dcMotor.get("c"),
             map.dcMotor.get("d")
         );
+        /*
         elevator = new Elevator(true,
                 map.dcMotor.get("y"),
                 map.dcMotor.get("x"),
@@ -44,11 +46,14 @@ public class Robot
                                     :
                                     null
         );
-        knocker = new Knocker(map.servo.get("k0"), right);
+        */
+        grabber = new Grabber(map.dcMotor.get("extender"), map.servo.get("relic_grabber"), map.servo.get("relic_flipper"));
+        knocker = new Knocker(map.servo.get("kX"), map.servo.get("kY"), right);
 
         // Initialize modules
         drive.init();
-        elevator.init();
+        //elevator.init();
+        grabber.init();
         knocker.init();
 
         stop();
@@ -70,7 +75,9 @@ public class Robot
      * Run internal checks on modules
      */
     public void update() {
-        elevator.update();
+        if(elevator != null)
+            elevator.update();
+        grabber.update();
     }
 
     /**
@@ -78,12 +85,14 @@ public class Robot
      */
     public void stop() {
         drive.stop();
-        elevator.stop();
+        if(elevator != null)
+            elevator.stop();
     }
 
     public void feedback(Telemetry telemetry) {
         this.drive.feedback(telemetry);
         this.knocker.feedback(telemetry);
         this.elevator.feedback(telemetry);
+        this.knocker.feedback(telemetry);
     }
 }

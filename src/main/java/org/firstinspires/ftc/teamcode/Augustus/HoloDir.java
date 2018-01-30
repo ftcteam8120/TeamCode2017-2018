@@ -7,7 +7,8 @@ public class HoloDir
     public double b;
     public double c;
     public double d;
-    public HoloDir(double ax, double bx, double cx, double dx){
+
+    public HoloDir(double cx, double dx, double ax, double bx){
         a=ax;
         b=bx;
         c=cx;

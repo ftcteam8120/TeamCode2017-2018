@@ -1,17 +1,21 @@
 package org.firstinspires.ftc.teamcode.Augustus.Autonomous.Handlers;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Augustus.ClawPos;
+import org.firstinspires.ftc.teamcode.Augustus.ElevatorXPos;
 import org.firstinspires.ftc.teamcode.Augustus.Handler;
+import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
+import org.firstinspires.ftc.teamcode.Augustus.JClaw;
 import org.firstinspires.ftc.teamcode.Augustus.Section;
 import org.firstinspires.ftc.teamcode.Augustus.Side;
 
-public class BasicAutonomous extends Handler {
+public class AdvancedAutonomous extends Handler {
 
-    private double WHEEL_SPEED;
+    private double speed;
 
-    public BasicAutonomous(double speed) {
+    public AdvancedAutonomous(double speed) {
         super();
-        WHEEL_SPEED = speed;
+        this.speed = speed;
     }
 
     /**
@@ -24,10 +28,11 @@ public class BasicAutonomous extends Handler {
         switch (state) {
             case 0:
                 robot.knocker.out();
-                if(pause(500)) next();
+                if(pause(1500)) next();
                 break;
             case 1:
-                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) || (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
+                if((side == Side.BLUE && robot.knocker.colorRangeSensor.isRed()) ||
+                        side == Side.RED && !robot.knocker.colorRangeSensor.isRed())
                     next(-2);
                 else
                     next(2);
@@ -44,7 +49,6 @@ public class BasicAutonomous extends Handler {
                 robot.knocker.center();
                 robot.knocker.in();
                 if(pause(500)) next();
-                break;
             default:
                 robot.stop();
                 break;
@@ -60,10 +64,11 @@ public class BasicAutonomous extends Handler {
         switch (state) {
             case 0:
                 robot.knocker.out();
-                if(pause(500)) next();
+                if(pause(1500)) next();
                 break;
             case 1:
-                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) || (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
+                if((side == Side.BLUE && robot.knocker.colorRangeSensor.isRed()) ||
+                        side == Side.RED && !robot.knocker.colorRangeSensor.isRed())
                     next(-2);
                 else
                     next(2);
@@ -80,7 +85,6 @@ public class BasicAutonomous extends Handler {
                 robot.knocker.center();
                 robot.knocker.in();
                 if(pause(500)) next();
-                break;
             default:
                 robot.stop();
                 break;
@@ -98,6 +102,4 @@ public class BasicAutonomous extends Handler {
     public void feedback(Telemetry telemetry) {
         robot.feedback(telemetry);
     }
-
-
 }

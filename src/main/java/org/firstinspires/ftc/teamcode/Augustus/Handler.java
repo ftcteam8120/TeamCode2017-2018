@@ -49,6 +49,10 @@ public abstract class Handler {
         state = nextState;
     }
 
+    public boolean pause(int ms){
+        return handler.runTime.milliseconds() >= handler.lastTick + ms;
+    }
+
     public AutonomousHandler handler;
 
     abstract public void update();

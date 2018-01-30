@@ -121,65 +121,6 @@ public class MediumAutonomous extends Handler {
                 robot.elevator.stopVert();
                 next();
                 break;
-            /*case 3:
-                // Move back to the base position
-                // Spend 500 ms doing this
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                if(robot.drive.a.getDistanceTraveled() > 0)
-                    robot.drive.setAllDrive(-KNOCK_SPEED);
-                else
-                    robot.drive.setAllDrive(KNOCK_SPEED);
-                break;
-            case 4:
-                if (side == Side.BLUE) {
-                    // Move backwards for 3s
-                    if(handler.runTime.milliseconds() >= (handler.lastTick + 3000)) next();
-                    robot.drive.setDrive(HoloDir.BACKWARD, AUTO_SPEED);
-                } else {
-                    // Move forwards for 3s
-                    if(handler.runTime.milliseconds() >= (handler.lastTick + 3000)) next();
-                    robot.drive.setDrive(HoloDir.FORWARD, AUTO_SPEED);
-                }
-                break;
-            case 5:
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 2000)) next();
-                if (side == Side.BLUE) {
-                    // Move left for 2s
-                    robot.drive.setDrive(HoloDir.LEFT, AUTO_SPEED);
-                } else {
-                    // Move right for 2s
-                    robot.drive.setDrive(HoloDir.RIGHT, AUTO_SPEED);
-                }
-                break;
-            case 6:
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                if (side == Side.BLUE) {
-                    // Rotate the robot right to turn toward the cryptobox
-                    robot.drive.setAllDrive(ROTATE_SPEED);
-                } else {
-                    // Rotate the robot left to turn toward the cryptobox
-                    robot.drive.setAllDrive(-ROTATE_SPEED);
-                }
-                break;
-            case 7:
-                // Extend the elevator for 1s
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 1000)) next();
-                robot.elevator.out(false);
-                break;
-            case 8:
-                // Stop the elevator from moving
-                robot.elevator.stop();
-                next();
-                break;
-            case 9:
-                // Release the glyph and slowly back up for 1.5s
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 1500)) next();
-                robot.elevator.claw.release(false);
-                robot.drive.setDrive(HoloDir.BACKWARD, 0.15);
-                break;
-            case 10:
-                robot.stop();
-                break;*/
             default:
                 robot.stop();
                 break;
@@ -262,47 +203,6 @@ public class MediumAutonomous extends Handler {
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
                 robot.drive.setDrive(HoloDir.RIGHT, 0.5);
                 break;
-            /*case 3:
-                // Move back to the base position
-                // Spend 0.5s doing this
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                if(robot.drive.a.getDistanceTraveled() > 0)
-                    robot.drive.setAllDrive(-KNOCK_SPEED);
-                else
-                    robot.drive.setAllDrive(KNOCK_SPEED);
-            case 4:
-                // Move backwards for 3s
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 3000)) next();
-                if(side == Side.BLUE) {
-                    robot.drive.setDrive(HoloDir.BACKWARD, AUTO_SPEED);
-                } else {
-                    robot.drive.setDrive(HoloDir.FORWARD, AUTO_SPEED);
-                }
-                break;
-            case 5:
-                // Rotate the robot to turn toward the cryptobox
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                robot.drive.setAllDrive(-ROTATE_SPEED);
-                break;
-            case 6:
-                // Extend the elevator for 1s
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 1000)) next();
-                robot.elevator.out(false);
-                break;
-            case 7:
-                // Stop the elevator from moving
-                robot.elevator.stop();
-                next();
-                break;
-            case 8:
-                // Release the glyph and slowly back up for 1.5s
-                if(handler.runTime.milliseconds() >= (handler.lastTick + 1500)) next();
-                robot.elevator.claw.release(false);
-                robot.drive.setDrive(HoloDir.BACKWARD, 0.15);
-                break;
-            case 9:
-                robot.stop();
-                break;*/
             default:
                 robot.stop();
                 break;

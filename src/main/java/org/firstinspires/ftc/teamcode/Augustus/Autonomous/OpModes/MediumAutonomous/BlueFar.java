@@ -17,7 +17,8 @@ public class BlueFar extends OpMode {
     public void init() {
         augustus = new Robot();
         augustus.init(hardwareMap, ClawType.J);
-        handler = new AutonomousHandler(augustus, Side.BLUE, Section.FAR, new MediumAutonomous(1));
+        handler = new AutonomousHandler(augustus, Side.BLUE, Section.FAR, new MediumAutonomous());
+        augustus.elevator.claw.clinch();
     }
 
     public void loop() {

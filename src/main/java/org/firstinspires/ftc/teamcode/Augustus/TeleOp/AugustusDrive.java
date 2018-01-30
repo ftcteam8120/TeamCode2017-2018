@@ -75,6 +75,7 @@ public class AugustusDrive extends OpMode
      * @param gamepad gamepad used for controlling drivetrain components.
      */
     public void updateDriver(Gamepad gamepad) {
+
         // Reset encoders
         if(gamepad.b)
             augustus.stop();
@@ -179,19 +180,40 @@ public class AugustusDrive extends OpMode
      */
     public void updateUtility(Gamepad gamepad) {
 
-        if (gamepad.left_trigger > 0.5) {
+        // swapped right_trigger and left_trigger
+        // *.release and *.grab is flipped
+
+        if (gamepad.right_trigger > 0.5) {
             augustus.elevator.claw.release(true);
-        } else if (gamepad.right_trigger > 0.5) {
+        } else if (gamepad.left_trigger > 0.5) {
             augustus.elevator.claw.grab(true);
         } else {
             augustus.elevator.claw.stop();
         }
 
-        // Knock
+        if(gamepad.y)
+            augustus.grabber.flipUp();
+        else if(gamepad.x)
+            augustus.grabber.flipDown();
+
+        if(gamepad.right_bumper)
+            augustus.grabber.extend(.7);
+        else if(gamepad.left_bumper)
+            augustus.grabber.retract(.7);
+        else
+            augustus.grabber.extend(0);
+
+        if(gamepad.a)
+            augustus.grabber.grab();
+        else if(gamepad.b)
+            augustus.grabber.release();
+
+        /* Knock
         if(gamepad.x)
             augustus.knocker.out();
         else if(gamepad.y)
             augustus.knocker.in();
+        */
 
         // Check if elevator motor should be on
         // Negative is down and positive is up
@@ -224,7 +246,10 @@ public class AugustusDrive extends OpMode
      * Print various telemetry data to the screen
      */
     public void feedback() {
-        //augustus.feedback(telemetry);
+
+        augustus.feedback(telemetry);
+
         telemetry.addData("stick angle", normalize(90 - angle));
+
     }
 }

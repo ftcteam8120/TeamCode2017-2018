@@ -88,7 +88,7 @@ public class Elevator implements Module {
      * Move elevator down.
      */
     public void down() {
-        y.setPower(-0.5);
+        y.setPower(-0.75);
     }
 
     /**

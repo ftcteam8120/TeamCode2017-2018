@@ -7,7 +7,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class SingleClaw implements Claw {
     private Servo c;
+    public void clinch(){
 
+    }
     private double clawPos;
     private static final double CLAW_INCREMENT = 0.1;
 

@@ -3,12 +3,20 @@ package org.firstinspires.ftc.teamcode.Augustus;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Augustus.Claw;
 
 public class JClaw implements Claw
 {
+    public void clinch(){
+        ElapsedTime time = new ElapsedTime();
+        while(time.milliseconds()<700){
+            grab(false);
+        }
+        stop();
+    }
     private DcMotor motor;
     //position of servo
     public ClawPos p;

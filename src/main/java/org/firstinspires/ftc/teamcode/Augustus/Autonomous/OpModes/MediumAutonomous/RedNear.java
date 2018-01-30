@@ -17,7 +17,8 @@ public class RedNear extends OpMode {
     public void init() {
         augustus = new Robot();
         augustus.init(hardwareMap, ClawType.J);
-        handler = new AutonomousHandler(augustus, Side.RED, Section.NEAR, new MediumAutonomous(1));
+        handler = new AutonomousHandler(augustus, Side.RED, Section.NEAR, new MediumAutonomous());
+        augustus.elevator.claw.clinch();
     }
 
     public void loop() {

@@ -60,12 +60,12 @@ public class DriveTrain implements Module {
     /**
      * Set each motor to a different power.
      *
-     * @param aPow power to which motor a is set.
-     * @param bPow power to which motor b is set.
      * @param cPow power to which motor c is set.
      * @param dPow power to which motor d is set.
+     * @param aPow power to which motor a is set.
+     * @param bPow power to which motor b is set.
      */
-    public void setDrive(double aPow, double bPow, double cPow, double dPow)
+    public void setDrive(double cPow, double dPow, double aPow, double bPow)
     {
         a.setPower(aPow);
         b.setPower(bPow);
@@ -80,7 +80,7 @@ public class DriveTrain implements Module {
      */
     public void setDrive(HoloDir dir, double pow)
     {
-        setDrive(dir.a*pow,dir.b*pow,dir.c*pow,dir.d*pow);
+        setDrive(dir.c*pow,dir.d*pow,dir.a*pow,dir.b*pow);
     }
 
     /**
@@ -112,8 +112,14 @@ public class DriveTrain implements Module {
         // Not yet implemented
     }
 
+    /**
+     * Displays feedback to the Driver station
+     *
+     * @param telemetry the data, some of which will be displayed on screen
+     */
     public void feedback(Telemetry telemetry) {
         telemetry.addData("Drive Encoders", this.encoders);
+        telemetry.addData("Values", "a:" + a.getDistanceTraveled() + "; b:" + b.getDistanceTraveled() + "; c:" + c.getDistanceTraveled() + "; d:" + d.getDistanceTraveled());
     }
 
 
