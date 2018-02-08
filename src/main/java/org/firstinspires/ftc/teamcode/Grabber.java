@@ -1,33 +1,39 @@
-package org.firstinspires.ftc.teamcode.Augustus;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Augustus.SmartMotor;
 
 //Relic Grabber
-public class Grabber{
+public class Grabber implements Module{
     //motor for extension of relic arm
     private SmartMotor out;
     //servo to clamp down grabbing mechanism
     private Servo claw;
+    //Servo to rotate Relic above the perimeter wall
     private Servo elbow;
 
-    private double servoPos;
-
-
+    /**
+     * Constructor
+     */
     public Grabber(DcMotor o2, Servo c, Servo e){
         out= new SmartMotor(o2, true);
         claw=c;
         elbow=e;
     }
 
+    /**
+     * To prepare the position of grabber for motion
+     */
     public void init(){
         out.init(DcMotorSimple.Direction.FORWARD);
-        servoPos = 0;
+        release();
         flipDown();
         stop();
+
     }
 
     /**
@@ -56,12 +62,23 @@ public class Grabber{
         out.setPower(0);
     }
 
+    @Override
+    public void update() {
+        // Not yet implemented
+    }
+
+    @Override
+    public void feedback(Telemetry telemetry) {
+        // Not yet implemented
+    }
+
     /**
      * Turns Servo so Grabber can extend over the wall
      */
     public void flipUp()
     {
-        elbow.setPosition(0);
+        // RIGHT LIMIT
+        elbow.setPosition(1);
     }
 
     /**
@@ -69,7 +86,8 @@ public class Grabber{
      */
     public void flipDown()
     {
-        elbow.setPosition(1);
+        // LEFT LIMIT
+        elbow.setPosition(0);
     }
 
     /**
@@ -77,8 +95,7 @@ public class Grabber{
      */
     public void grab()
     {
-        if(servoPos > 0)
-            servoPos--;
+        claw.setPosition(0);
     }
 
     /**
@@ -86,16 +103,7 @@ public class Grabber{
      */
     public void release()
     {
-        if(servoPos < 2)
-            servoPos++;
-    }
-
-    /**
-     * Sets claw to half closed compared to its current position
-     */
-    public void update()
-    {
-        claw.setPosition(servoPos / 2.0);
+        claw.setPosition(1);
     }
 
 }

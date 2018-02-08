@@ -3,12 +3,19 @@ package org.firstinspires.ftc.teamcode.Augustus;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+//Wrapper class for DcMotor
 public class SmartMotor
 {
+    //Motor instance variable
     private DcMotor motor;
+    //The last value marked
     private int lastValue;
+    //Boolean telling whether or not to use encoders
     private boolean encoders;
 
+    /**
+     * Constructor
+     */
     public SmartMotor(DcMotor m, boolean e)
     {
         motor = m;
@@ -16,6 +23,11 @@ public class SmartMotor
         lastValue = 0;
     }
 
+    /**
+     * What happens when a smart motor is initialized
+     *
+     * @param dir the direction which the motor is set to run
+     */
     public void init(DcMotorSimple.Direction dir)
     {
         motor.setDirection(dir);
@@ -56,6 +68,16 @@ public class SmartMotor
     {
         if(encoders)
             lastValue = motor.getCurrentPosition();
+    }
+
+    /**
+     * Returns the motor
+     *
+     * @return the motor instance variable of this class
+     */
+    public DcMotor getInternal()
+    {
+        return motor;
     }
 
 }

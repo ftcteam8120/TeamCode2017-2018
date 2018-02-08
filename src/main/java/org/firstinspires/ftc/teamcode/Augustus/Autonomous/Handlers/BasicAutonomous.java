@@ -9,6 +9,9 @@ public class BasicAutonomous extends Handler {
 
     private double WHEEL_SPEED;
 
+    /*
+     * Constructor
+     */
     public BasicAutonomous(double speed) {
         super();
         WHEEL_SPEED = speed;
@@ -23,29 +26,37 @@ public class BasicAutonomous extends Handler {
 
         switch (state) {
             case 0:
+                //Drop knocker and wait .5 seconds
                 robot.knocker.out();
                 if(pause(500)) next();
                 break;
             case 1:
-                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) || (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
+                //Determines which case to go to next based on
+                // values from the color sensor and the Side enum
+                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) ||
+                        (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
                     next(-2);
                 else
                     next(2);
                 break;
             case -2:
+                //hit the jewel to the left in .5 seconds
                 robot.knocker.left();
                 if(pause(500)) next(3);
                 break;
             case 2:
+                //hit the Jewel on the right in .5 seconds
                 robot.knocker.right();
                 if(pause(500)) next(3);
                 break;
             case 3:
+                //retract the Knocker in .5 seconds
                 robot.knocker.center();
                 robot.knocker.in();
                 if(pause(500)) next();
                 break;
             default:
+                //Stop the robot if the next case can not be found
                 robot.stop();
                 break;
         }
@@ -59,34 +70,45 @@ public class BasicAutonomous extends Handler {
 
         switch (state) {
             case 0:
+                //Drop the Knocker in .5 seconds
                 robot.knocker.out();
                 if(pause(500)) next();
                 break;
             case 1:
-                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) || (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
+                //Determines which case to go to next based on
+                // values from the color sensor and the Side enum
+                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) ||
+                        (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
                     next(-2);
                 else
                     next(2);
                 break;
             case -2:
+                //Hit the Jewel on the left in .5 seconds
                 robot.knocker.left();
                 if(pause(500)) next(3);
                 break;
             case 2:
+                //hit the Jewel on the right in .5 seconds
                 robot.knocker.right();
                 if(pause(500)) next(3);
                 break;
             case 3:
+                //retract the Knocker in .5 seconds
                 robot.knocker.center();
                 robot.knocker.in();
                 if(pause(500)) next();
                 break;
             default:
+                //Stop the robot if the next case can't be found
                 robot.stop();
                 break;
         }
     }
 
+    /**
+     * Check the Side enum
+     */
     public void update() {
         if (section == Section.FAR) {
             this.Far();
@@ -95,6 +117,11 @@ public class BasicAutonomous extends Handler {
         }
     }
 
+    /*
+    *Print out the feedback function from the robot class
+    *
+    * @param telemetry the imported way to print specified data to the Drivers Station
+    */
     public void feedback(Telemetry telemetry) {
         robot.feedback(telemetry);
     }

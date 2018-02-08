@@ -2,25 +2,19 @@ package org.firstinspires.ftc.teamcode.Augustus;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Augustus.Claw;
 
 public class JClaw implements Claw
 {
-    public void clinch(){
-        ElapsedTime time = new ElapsedTime();
-        while(time.milliseconds()<700){
-            grab(false);
-        }
-        stop();
-    }
+    //motor used in this variation of the Claw
     private DcMotor motor;
     //position of servo
     public ClawPos p;
 
+    /**
+     * Constructor
+     */
     public JClaw(DcMotor m) {
         motor = m;
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -28,6 +22,9 @@ public class JClaw implements Claw
         p = ClawPos.STOPPED;
     }
 
+    /**
+     * Empty required function
+     */
     public void init() {
         // Nothing to do here
     }
@@ -43,7 +40,7 @@ public class JClaw implements Claw
     @Override
     public void grab(boolean override) {
         if (override) {
-            this.motor.setPower(1);
+            this.motor.setPower(-1);
             this.p = ClawPos.OVERRIDE;
         } else {
             this.p = ClawPos.CLOSED;
@@ -61,7 +58,7 @@ public class JClaw implements Claw
     @Override
     public void release(boolean override) {
         if (override) {
-            this.motor.setPower(-1);
+            this.motor.setPower(1);
             this.p = ClawPos.OVERRIDE;
         } else {
             this.p = ClawPos.OPEN;
@@ -115,10 +112,20 @@ public class JClaw implements Claw
         }
     }
 
+    /**
+     * Function which sets the Claws position using the ClawPos enum
+     *
+     * @param pos Position the claw will be set to
+     */
     public void setPosition(ClawPos pos) {
         p = pos;
     }
 
+    /**
+     * Returns the position of the Claw (used for the .feedback function)
+     *
+     * @return the name of the position as a String
+     */
     private String getClawStateString() {
         switch (p) {
             case CLOSED:
@@ -136,6 +143,11 @@ public class JClaw implements Claw
         }
     }
 
+    /**
+     * Function which prints specified data to the Drivers Station
+     *
+     * @param telemetry the object with the ability to print to the Drivers station
+     */
     public void feedback(Telemetry telemetry) {
         telemetry.addData("Claw Pos", motor.getCurrentPosition());
         telemetry.addData("Claw State", this.getClawStateString());

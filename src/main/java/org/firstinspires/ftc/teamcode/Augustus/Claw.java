@@ -10,8 +10,6 @@ public interface Claw {
      */
     void grab(boolean override);
 
-    void clinch();
-
     /**
      * Abstract release method
      *

@@ -33,7 +33,7 @@ public class Arm {
     {
         if (power > 0)
         {
-            elbow.setPower(elbow.getCurrentPosition() < Constants.ELBOW_MAX ? power : 0);
+            elbow.setPower(elbow.getCurrentPosition() < 99999 ? power : 0);
         }
         else
         {

@@ -10,17 +10,25 @@ import org.firstinspires.ftc.teamcode.Augustus.Robot;
 import org.firstinspires.ftc.teamcode.Augustus.Section;
 import org.firstinspires.ftc.teamcode.Augustus.Side;
 
+//Basic Autonomous for the Blue Alliance
+// starting on the Balancing Stone closest to the Relic Recovery Zone
 @Autonomous(name = "BasicAutoBlueNear", group = "Augustus")
 public class BlueNear extends OpMode {
     private AutonomousHandler handler;
     private Robot augustus;
 
+    /**
+     * What occurs when this Class is initialized
+     */
     public void init() {
         augustus = new Robot();
         augustus.init(hardwareMap, ClawType.J);
         handler = new AutonomousHandler(augustus, Side.BLUE, Section.NEAR, new BasicAutonomous(1));
     }
 
+    /**
+     * What occurs when this class is played
+     */
     public void loop() {
         augustus.update();
         handler.update();

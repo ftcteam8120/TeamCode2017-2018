@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Augustus;
+package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.lynx.LynxI2cColorRangeSensor;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 
@@ -15,7 +15,7 @@ public class ColorRangeSensor {
     }
 
     /**
-     * The sensor
+     * The sensor itself
      */
     private LynxI2cColorRangeSensor sensor;
 

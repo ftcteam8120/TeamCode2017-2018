@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Augustus;
+package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -26,7 +26,8 @@ public interface Module {
 
     /**
      * All modules must be able to provide feedback via the telemetry data
-     * @param telemetry
+     *
+     * @param telemetry Object with the ability to print to the Drivers Station
      */
     void feedback(Telemetry telemetry);
 

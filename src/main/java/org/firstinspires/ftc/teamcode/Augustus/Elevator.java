@@ -1,49 +1,44 @@
 package org.firstinspires.ftc.teamcode.Augustus;
 
-
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Module;
 
 public class Elevator implements Module {
+    //boolean determining whether or not to use encoders when running motors
     private boolean encoder;
-
-    private DcMotor y;
-    private DcMotor x;
+    //Controls up/down motion
+    private SmartMotor y;
+    // Controls in/out motion
+    private SmartMotor x;
+    //The claw currently attached to the robot
     public Claw claw;
+    //A way of determining how the elevator is positioned laterally
     public ElevatorXPos xPos;
 
-    // x moves horizontally
-    // y moves vertically
+
+    /**
+     * Constructor
+     */
     public Elevator(boolean e, DcMotor y, DcMotor x, Claw claw)
     {
         encoder = e;
-        this.y = y;
-        this.x = x;
+        this.y = new SmartMotor(y, true);
+        this.x = new SmartMotor(x, true);
         this.claw = claw;
         xPos = ElevatorXPos.STOPPED;
     }
 
+    /**
+     * What occurs upon initialization of the Elevator
+     */
     public void init() {
-        y.setDirection(DcMotorSimple.Direction.REVERSE);
-        x.setDirection(DcMotorSimple.Direction.FORWARD);
-        if(encoder)
-        {
-            y.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            y.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            x.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            x.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-        else {
-            y.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            x.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
+        y.init(DcMotorSimple.Direction.REVERSE);
+        x.init(DcMotorSimple.Direction.FORWARD);
 
-        this.stopHoriz();
+        this.stop();
     }
 
     /**
@@ -101,6 +96,7 @@ public class Elevator implements Module {
     public void stop() {
         this.stopHoriz();
         this.stopVert();
+        claw.stop();
     }
 
     /**
@@ -112,14 +108,14 @@ public class Elevator implements Module {
                 this.stopHoriz();
                 break;
             case EXTENDED:
-                if (x.getCurrentPosition() < -6300) {
+                if (x.getInternal().getCurrentPosition() < -6300) {
                     xPos = ElevatorXPos.STOPPED;
                 } else {
                     x.setPower(0.5);
                 }
                 break;
             case RETRACTED:
-                if (x.getCurrentPosition() > -200) {
+                if (x.getInternal().getCurrentPosition() > -200) {
                     xPos = ElevatorXPos.STOPPED;
                 } else {
                     x.setPower(-0.5);
@@ -134,6 +130,11 @@ public class Elevator implements Module {
             claw.update();
     }
 
+    /**
+     * Used in telemetry to determine the lateral position of the Elevator
+     *
+     * @return the name as a String of the enum position
+     */
     private String getElevatorXStateString() {
         switch (xPos) {
             case RETRACTED:
@@ -149,9 +150,34 @@ public class Elevator implements Module {
         }
     }
 
+    /**
+     * Function to share how many encoder ticks the motor has traveled since initialization
+     *
+     * @return how far the motor has traveled
+     */
+    public int getXPos()
+    {
+        return this.x.getDistanceTraveled();
+    }
+
+    /**
+     * Function to share how many encoder ticks the motor has traveled since initialization
+     *
+     * @return how far the motor has traveled
+     */
+    public int getYPos()
+    {
+        return this.y.getDistanceTraveled();
+    }
+
+    /**
+     * Function which displays data to the Drivers Station
+     *
+     * @param telemetry The way which data is displayed to the Drivers Station
+     */
     public void feedback(Telemetry telemetry) {
-        telemetry.addData("Elevator X Pos", this.x.getCurrentPosition());
-        telemetry.addData("Elevator Y Pos", this.y.getCurrentPosition());
+        telemetry.addData("Elevator X Pos", x.getInternal().getCurrentPosition());
+        telemetry.addData("Elevator Y Pos", y.getInternal().getCurrentPosition());
         telemetry.addData("Elevator X State", this.getElevatorXStateString());
         if (claw != null) claw.feedback(telemetry);
     }

@@ -1,19 +1,22 @@
 package org.firstinspires.ftc.teamcode.Augustus;
 
-
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class DoubleClaw implements Claw
 {
+    //Leftmost Servo
     private Servo cL;
+    //Rightmost Servo
     private Servo cR;
-
+    //Position of claw, created before the clawPos enum
     private double clawPos;
     private static final double CLAW_INCREMENT = 0.5;
 
+    /**
+     * Constructor
+     */
     public DoubleClaw(Servo scL, Servo scR)
     {
         cL = scL;
@@ -21,6 +24,9 @@ public class DoubleClaw implements Claw
         clawPos = 0.0;
     }
 
+    /**
+     * empty function which is required but not needed
+     */
     public void init() {
         // Nothing to do here
     }
@@ -65,6 +71,9 @@ public class DoubleClaw implements Claw
         }
     }
 
+    /**
+     * empty function only created so this could implement the Claw interface
+     */
     @Override
     public void stop() {}
 
@@ -78,8 +87,6 @@ public class DoubleClaw implements Claw
         cR.setPosition(clawPos);
     }
 
-    public void clinch(){
-
-    }
+    //empty function only created so this could implement the Claw interface
     public void feedback(Telemetry telemetry) {}
 }

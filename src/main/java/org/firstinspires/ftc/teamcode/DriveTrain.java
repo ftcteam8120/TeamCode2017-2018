@@ -1,20 +1,26 @@
-package org.firstinspires.ftc.teamcode.Augustus;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
+import org.firstinspires.ftc.teamcode.Augustus.SmartMotor;
 
 import static org.firstinspires.ftc.teamcode.QuickMaths.*;
 
 public class DriveTrain implements Module {
+    //boolean which tells whether or not to use encoders when running motors
     public boolean encoders;
-
+    //Motors on base of our robot which are each attached to a wheel
     public SmartMotor a;
     public SmartMotor b;
     public SmartMotor c;
     public SmartMotor d;
 
+    /**
+     * Constructor
+     */
     public DriveTrain(boolean e, DcMotor aM, DcMotor bM, DcMotor cM, DcMotor dM)
     {
         a = new SmartMotor(aM, e);
@@ -24,6 +30,9 @@ public class DriveTrain implements Module {
         encoders = e;
     }
 
+    /**
+     * What occurs when this class is initialized
+     */
     public void init()
     {
         a.init(DcMotorSimple.Direction.REVERSE);
@@ -47,7 +56,7 @@ public class DriveTrain implements Module {
     /**
      * Set all motors to the same power.
      *
-     * @param pow       the power which all motors are set
+     * @param pow the power which all motors are set
      */
     public void setAllDrive(double pow)
     {
@@ -74,6 +83,7 @@ public class DriveTrain implements Module {
     }
 
     /**
+     *Tells which direction to drive and how quickly
      *
      * @param dir a holodir constant
      * @param pow the power which all motors are set
@@ -84,6 +94,7 @@ public class DriveTrain implements Module {
     }
 
     /**
+     * What angle to move at when the robot drives
      *
      * @param angle the angle of the stick
      * @param pow the power which all motors are set
@@ -108,8 +119,24 @@ public class DriveTrain implements Module {
             setDrive(HoloDir.FORWARD, pow);
     }
 
+    /**
+     * Function required by the Modules interface
+     */
     public void update() {
-        // Not yet implemented
+        // Not yet necessary
+    }
+
+    /**
+     * Function to determine the average value of the four drivetrain motor encoders
+     *
+     * @return returns the average value of all the Drivetrain encoders
+     */
+    public int getAverageTravel()
+    {
+        return (Math.abs(a.getDistanceTraveled()) +
+                Math.abs(b.getDistanceTraveled()) +
+                Math.abs(c.getDistanceTraveled()) +
+                Math.abs(d.getDistanceTraveled()))/4;
     }
 
     /**

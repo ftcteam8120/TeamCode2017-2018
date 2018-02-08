@@ -4,49 +4,41 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.Augustus.ClawPos;
 import org.firstinspires.ftc.teamcode.Augustus.ClawType;
 import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
-import org.firstinspires.ftc.teamcode.Augustus.JClaw;
 import org.firstinspires.ftc.teamcode.Augustus.Robot;
 
-import static org.firstinspires.ftc.teamcode.QuickMaths.*;
-
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import static org.firstinspires.ftc.teamcode.QuickMaths.normalize;
 
+//The class controls the TeleOp of our Robot
 @TeleOp(name = "AugustusDrive", group = "Augustus")
 public class AugustusDrive extends OpMode
 {
+    //The robot being used in this class
     Robot augustus;
-    private ElapsedTime runtime;
 
+    //What occurs when AugustusDrive is initted
     @Override
     public void init() {
         augustus = new Robot();
         augustus.init(hardwareMap, ClawType.J);
-        runtime = new ElapsedTime();
-        runtime.reset();
     }
 
+    //vertical displacement of analog stick for directional control
     double v;
+    //horizontal displacement of analog stick for directional control
     double h;
+    //The angle computed by v and h
     double angle;
-    //
-    double aPow;
-    double bPow;
-    double cPow;
-    double dPow;
-    //
+    //The power which the robot turns at
     double rotate;
-    //
+    //The power that the motors are set to when the robot drives
     double speed;
-    //
+    //The adjustable speed which allows for a "slowed down" mode of driving
     double holoSpeed;
-    //
-    double currentTime;
 
+    //What is called while AugustusDrive is running
     @Override
     public void loop() {
         // Check for driver controls and update accordingly
@@ -76,9 +68,15 @@ public class AugustusDrive extends OpMode
      */
     public void updateDriver(Gamepad gamepad) {
 
-        // Reset encoders
-        if(gamepad.b)
-            augustus.stop();
+        //control of knocker
+        if(gamepad.a)
+            augustus.knocker.out();
+        else if(gamepad.b)
+            augustus.knocker.fullIn();
+        if(gamepad.x)
+            augustus.knocker.left();
+        else if(gamepad.y)
+            augustus.knocker.right();
 
         // Adjust "safe" perpendicular speed
         if(gamepad.right_trigger > 0)
@@ -153,16 +151,6 @@ public class AugustusDrive extends OpMode
                 }
                 augustus.drive.setDrive(normalize(90 - angle), holoSpeed);
             }
-            //
-
-
-            /* Old fluid movement code
-            aPow = (-v - h) * holoSpeed;
-            bPow = (v - h) * holoSpeed;;
-            cPow = (v + h) * holoSpeed;;
-            dPow = (-v + h) * holoSpeed;
-            augustus.drive.setDrive(aPow, bPow, cPow, dPow);
-            */
         }
     }
 
@@ -180,22 +168,22 @@ public class AugustusDrive extends OpMode
      */
     public void updateUtility(Gamepad gamepad) {
 
-        // swapped right_trigger and left_trigger
-        // *.release and *.grab is flipped
-
+        // Control of grab/release of Elevator Claw
         if (gamepad.right_trigger > 0.5) {
-            augustus.elevator.claw.release(true);
-        } else if (gamepad.left_trigger > 0.5) {
             augustus.elevator.claw.grab(true);
+        } else if (gamepad.left_trigger > 0.5) {
+            augustus.elevator.claw.release(true);
         } else {
             augustus.elevator.claw.stop();
         }
 
+        //control of the ability to flip relic grabber over field perimeter
         if(gamepad.y)
             augustus.grabber.flipUp();
         else if(gamepad.x)
             augustus.grabber.flipDown();
 
+        //control of the extension/retraction of the relic grabber arm
         if(gamepad.right_bumper)
             augustus.grabber.extend(.7);
         else if(gamepad.left_bumper)
@@ -203,17 +191,11 @@ public class AugustusDrive extends OpMode
         else
             augustus.grabber.extend(0);
 
+        //control of the clamping mechanism on the Relic Grabber
         if(gamepad.a)
             augustus.grabber.grab();
         else if(gamepad.b)
             augustus.grabber.release();
-
-        /* Knock
-        if(gamepad.x)
-            augustus.knocker.out();
-        else if(gamepad.y)
-            augustus.knocker.in();
-        */
 
         // Check if elevator motor should be on
         // Negative is down and positive is up
