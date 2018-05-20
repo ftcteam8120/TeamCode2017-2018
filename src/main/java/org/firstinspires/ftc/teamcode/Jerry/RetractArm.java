@@ -6,17 +6,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 @Autonomous(name="Retract", group="Jerry")
 public class RetractArm extends OpMode
 {
-    Robot robot;
+    RobotJerry robotJerry;
 
     @Override
     public void init()
     {
-        robot = new Robot();
-        robot.init(hardwareMap);
+        robotJerry = new RobotJerry();
+        robotJerry.init(hardwareMap);
     }
 
     @Override
     public void loop() {
-        robot.primary.elbow.setPower(-.3);
+        robotJerry.primary.elbow.setPower(-.3);
     }
 }

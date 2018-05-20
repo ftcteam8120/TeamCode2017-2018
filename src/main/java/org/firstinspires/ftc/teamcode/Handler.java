@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.Augustus;
+package org.firstinspires.ftc.teamcode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Augustus.RobotAugustus;
 
 import java.util.ArrayList;
 

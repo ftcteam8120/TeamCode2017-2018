@@ -7,20 +7,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Grabber;
 import org.firstinspires.ftc.teamcode.Module;
 
-public class RightUpper implements Module {
+// RIGHT SIDE
+public class BlueUpper implements Module {
 
     private DcMotor rightImpeller;
-    private Servo rightKicker;
     private DcMotor slider;
     private Servo flipper;
 
     public Grabber grabber;
 
     // construct the object
-    public RightUpper(DcMotor imp, Servo kick, DcMotor sli, Servo f, Grabber g)
+    public BlueUpper(DcMotor imp, DcMotor sli, Servo f, Grabber g)
     {
         rightImpeller = imp;
-        rightKicker = kick;
         slider = sli;
         flipper = f;
         grabber = g;
@@ -29,20 +28,37 @@ public class RightUpper implements Module {
     // initialize all actuators and sub-modules
     @Override
     public void init() {
-        rightKicker.setPosition(0);
-        flipper.setPosition(0);
+
+        flip(false);
 
         rightImpeller.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slider.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        grabber.init();
+        if(grabber != null)
+            grabber.init();
+    }
+
+    // Impeller controls
+    public void impel(boolean boost)
+    {
+        rightImpeller.setPower(boost ? 1 : .5);
+    }
+    public void outpel(boolean boost)
+    {
+        rightImpeller.setPower(boost ? -1 : -.5);
+    }
+    public void dontpel()
+    {
+        rightImpeller.setPower(0);
     }
 
     // flip the flipper (if up up, if not up down)
     public void flip(boolean up)
     {
-        flipper.setPosition(up ? 1 : 0);
+        flipper.setPosition(up ? 0 : .8);
     }
+
+    public void level() { flipper.setPosition(.65); }
 
     // set the slide motor power
     public void slide(double power)
@@ -56,18 +72,21 @@ public class RightUpper implements Module {
         rightImpeller.setPower(0);
         slider.setPower(0);
 
-        grabber.stop();
+        if(grabber != null)
+            grabber.stop();
     }
 
     // update the sub-modules
     @Override
     public void update() {
-        grabber.update();
+        if(grabber != null)
+            grabber.update();
     }
 
     // get telemetry readings
     @Override
     public void feedback(Telemetry telemetry) {
-        grabber.feedback(telemetry);
+        if(grabber != null)
+            grabber.feedback(telemetry);
     }
 }

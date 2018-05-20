@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Augustus.Autonomous.OpModes.AdvancedAutonomous;
+package org.firstinspires.ftc.teamcode.Nero.Autonomous.Registry;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -6,44 +6,44 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.Augustus.Autonomous.Handlers.AdvancedAutonomous;
 import org.firstinspires.ftc.teamcode.AutonomousHandler;
-import org.firstinspires.ftc.teamcode.Augustus.ClawType;
-import org.firstinspires.ftc.teamcode.Augustus.RobotAugustus;
-import org.firstinspires.ftc.teamcode.Section;
-import org.firstinspires.ftc.teamcode.Side;
+import org.firstinspires.ftc.teamcode.Nero.Autonomous.Handlers.ThreeGlyphAutonomous;
+import org.firstinspires.ftc.teamcode.Nero.RobotNero;
+import org.firstinspires.ftc.teamcode.Robot;
 
-//Advanced Autonomous for the Red Alliance
-// starting on the Balancing Stone furthest from the Relic Recovery Zone
-@Autonomous(name = "AdvancedAutoRedFar", group = "Augustus")
-public class RedFar extends OpMode {
+import static org.firstinspires.ftc.teamcode.Section.NEAR;
+import static org.firstinspires.ftc.teamcode.Side.BLUE;
+
+@Autonomous(name = "NeroAutoBlueNear3", group = "Nero")
+public class ThreeGlyphBlueNear extends OpMode
+{
     private AutonomousHandler handler;
-    private RobotAugustus augustus;
+    private Robot nero;
     private VuforiaLocalizer vuforia;
 
     /**
      * What occurs when this Class is initialized
      */
     public void init() {
-        augustus = new RobotAugustus();
-        augustus.init(hardwareMap, ClawType.J);
+        nero = new RobotNero();
+        nero.init(hardwareMap);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AeCcTnL/////AAAAGUAPbo6kUUuwjowvOPWZ039HrVUCpXqngD/djJBaWh9OLO7sz1Tvb6tDZFox4o0tHyDOV0HMrLolDE3N2qkPIcIeCCZL8gBiKocDomdnXkTlg7xu4buajp23E9h5jlDriyYsZVreM8wk3RkWFZC21nx+N8WFBj/9N3SsBU/7fGJDzFq8I7/InurDgkQ/Zk3Uc4dGwM7SEmuJsI0oKrKfjrBOBWdFU3mVFhfokTebsb7/gZOtsEzJUP+oUpxS0lDvz5jfXVOkiVnXPLa9dyeC8ciRyKZ5WE1j+F+LFXcbEDfwObqwQ5mlSSuwASHh3OxXhJ9tT25S/WAhzzORUBs0PiShQuNsBGpKIFy0k87C3qxF";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         relicTrackables.activate();
 
-        handler = new AutonomousHandler(augustus, Side.RED, Section.FAR, new AdvancedAutonomous(1, relicTrackables.get(0)));
+        handler = new AutonomousHandler(nero, BLUE, NEAR, new ThreeGlyphAutonomous(relicTrackables.get(0)));
     }
 
     /**
      * What occurs when this class is played
      */
     public void loop() {
-        augustus.update();
+        nero.update();
         handler.update();
         handler.feedback(telemetry);
     }

@@ -23,6 +23,7 @@ public class ColorRangeSensor {
     private int baseRed = 0;
     private int baseBlue = 0;
     private int baseGreen = 0;
+    private double baseDist = 0;
 
     /**
      * Reset all the base values

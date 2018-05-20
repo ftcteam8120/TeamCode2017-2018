@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Module;
+import org.firstinspires.ftc.teamcode.SmartMotor;
 
 public class Elevator implements Module {
     //boolean determining whether or not to use encoders when running motors

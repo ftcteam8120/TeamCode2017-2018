@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Augustus.SmartMotor;
 
 //Relic Grabber
 public class Grabber implements Module{

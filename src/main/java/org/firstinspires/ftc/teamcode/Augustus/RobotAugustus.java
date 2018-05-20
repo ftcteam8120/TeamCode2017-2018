@@ -8,8 +8,9 @@ import org.firstinspires.ftc.teamcode.ColorRangeSensor;
 import org.firstinspires.ftc.teamcode.DriveTrain;
 import org.firstinspires.ftc.teamcode.Grabber;
 import org.firstinspires.ftc.teamcode.Knocker;
+import org.firstinspires.ftc.teamcode.Robot;
 
-public class Robot
+public class RobotAugustus implements Robot
 {
     //Instance variable which controls the robots Drivetrain
     public DriveTrain drive;
@@ -22,6 +23,10 @@ public class Robot
     //Instance Variable which controls the robots Grabber
     public Grabber grabber;
 
+    public void init(HardwareMap x){
+        init(x, null);
+    }
+
     /**
      * What runs when the robot is initted
      *
@@ -31,7 +36,7 @@ public class Robot
     public void init(HardwareMap map, ClawType clawType)
     {
         // Initialize sensors
-        initSensors(map);
+        //initSensors(map);
 
         // Map modules
         drive = new DriveTrain(true,
@@ -56,14 +61,14 @@ public class Robot
                                     null
         );
 
-        grabber = new Grabber(map.dcMotor.get("extender"), map.servo.get("relic_grabber"), map.servo.get("relic_flipper"));
-        knocker = new Knocker(map.servo.get("kX"), map.servo.get("kY"), right);
+        grabber = null;//new Grabber(map.dcMotor.get("extender"), map.servo.get("relic_grabber"), map.servo.get("relic_flipper"));
+        knocker = null;//new Knocker(map.servo.get("kX"), map.servo.get("kY"), right);
 
         // Initialize modules
         drive.init();
         elevator.init();
-        grabber.init();
-        knocker.init();
+        //grabber.init();
+        //knocker.init();
 
         stop();
     }
@@ -104,8 +109,7 @@ public class Robot
      */
     public void feedback(Telemetry telemetry) {
         this.drive.feedback(telemetry);
-        this.knocker.feedback(telemetry);
+        //this.knocker.feedback(telemetry);
         this.elevator.feedback(telemetry);
-        this.knocker.feedback(telemetry);
     }
 }

@@ -28,21 +28,17 @@ public class Knocker implements Module {
      * Initialize the Knocker
      */
     public void init() {
-        in();
+        //center();
     }
 
     /**
-     * Set the knocker to the down position
-     */
-    public void out() {
-        servoY.setPosition(0.9);
-    }
-
-    /**
-     * Pull the knocker in
+     * Pull the knocker in/out
      */
     public void in() {
-        servoY.setPosition(0.35);
+        servoY.setPosition(0.0);
+    }
+    public void out() {
+        servoY.setPosition(0.50);
     }
 
     /**
@@ -62,7 +58,7 @@ public class Knocker implements Module {
      */
     public void right()
     {
-        servoX.setPosition(0.4);
+        servoX.setPosition(.58);
     }
 
     /**
@@ -70,7 +66,7 @@ public class Knocker implements Module {
      */
     public void left()
     {
-        servoX.setPosition(.8);
+        servoX.setPosition(.98);
     }
 
     /**
@@ -78,7 +74,7 @@ public class Knocker implements Module {
      */
     public void center()
     {
-        servoX.setPosition(0.6);
+        servoX.setPosition(.77);
     }
 
     /**

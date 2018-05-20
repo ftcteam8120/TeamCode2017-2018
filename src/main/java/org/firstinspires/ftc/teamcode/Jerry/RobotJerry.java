@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.Jerry;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Robot {
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Robot;
+
+public class RobotJerry implements Robot {
 
     public DriveTrain drive;
     public TurnTable table;
@@ -26,4 +29,6 @@ public class Robot {
     {
         drive.stop();
     }
+
+    public void feedback(Telemetry telemetry){}
 }

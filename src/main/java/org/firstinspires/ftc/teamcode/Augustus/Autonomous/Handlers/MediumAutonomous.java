@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.Augustus.Autonomous.Handlers;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Augustus.ClawPos;
 import org.firstinspires.ftc.teamcode.Augustus.ElevatorXPos;
-import org.firstinspires.ftc.teamcode.Augustus.Handler;
-import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
+import org.firstinspires.ftc.teamcode.Augustus.RobotAugustus;
+import org.firstinspires.ftc.teamcode.Handler;
+import org.firstinspires.ftc.teamcode.HoloDir;
 import org.firstinspires.ftc.teamcode.Augustus.JClaw;
-import org.firstinspires.ftc.teamcode.Augustus.Section;
-import org.firstinspires.ftc.teamcode.Augustus.Side;
+import org.firstinspires.ftc.teamcode.Section;
+import org.firstinspires.ftc.teamcode.Side;
 
 public class MediumAutonomous extends Handler {
 
@@ -17,6 +18,8 @@ public class MediumAutonomous extends Handler {
     private double KNOCK_SPEED = 0.15;
     private double AUTO_SPEED = 1;
     private double ROTATE_SPEED = 0.55;
+
+    RobotAugustus augustus;
 
     public MediumAutonomous(double speed) {
         super();
@@ -31,19 +34,22 @@ public class MediumAutonomous extends Handler {
      */
     public void Far()
     {
-        if(!handler.started) start();
+        if(!handler.started){
+            start();
+            augustus = (RobotAugustus)robot;
+        }
 
         switch (state) {
             case 0:
                 // Extend the knocker
                 if(handler.runTime.milliseconds() >= 1500) next();
-                robot.knocker.out();
+                augustus.knocker.out();
                 break;
             case 1:
                 // Detect the color of the jewel and identify what case to go to next based on
                 // Side enum and what color is seen
-                if((side == Side.BLUE && robot.knocker.colorRangeSensor.isRed())
-                        || (side == Side.RED && !robot.knocker.colorRangeSensor.isRed()))
+                if((side == Side.BLUE && augustus.knocker.colorRangeSensor.isRed())
+                        || (side == Side.RED && !augustus.knocker.colorRangeSensor.isRed()))
                     next(side == Side.BLUE ? 2 : -2);
                 else
                     next(side == Side.BLUE ? -2 : 2);
@@ -51,52 +57,52 @@ public class MediumAutonomous extends Handler {
             case -2:
                 //turn for 2 seconds, direction determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 2000)) next(-3);
-                robot.drive.setAllDrive(side == Side.BLUE ? -.05 : .05);
+                augustus.drive.setAllDrive(side == Side.BLUE ? -.05 : .05);
                 break;
             case -3:
                 //retract Knocker and turn for 2 seconds, direction determined by Side enum
-                robot.knocker.in();
+                augustus.knocker.in();
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 2000)) next(4);
-                robot.drive.setAllDrive(side == Side.BLUE ? .05 : -.05);
+                augustus.drive.setAllDrive(side == Side.BLUE ? .05 : -.05);
                 break;
             case 2:
                 //Drive forward/backward, direction determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 600)) next();
-                robot.drive.setDrive(side == Side.BLUE ? HoloDir.BACKWARD : HoloDir.FORWARD, .2);
+                augustus.drive.setDrive(side == Side.BLUE ? HoloDir.BACKWARD : HoloDir.FORWARD, .2);
                 break;
             case 3:
                 //retract Knocker
-                robot.knocker.in();
+                augustus.knocker.in();
                 next();
             case 4:
-                //Robot goes forward/backward for an amount of time determined by
+                //RobotNero goes forward/backward for an amount of time determined by
                 // which side of the robot the knocked Jewel was on
                 // direction determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick +
                                             (states.indexOf(2) < 0 ? 2500 : 1900))) next();
-                robot.drive.setDrive(side == Side.BLUE ? HoloDir.BACKWARD : HoloDir.FORWARD, .5);
+                augustus.drive.setDrive(side == Side.BLUE ? HoloDir.BACKWARD : HoloDir.FORWARD, .5);
                 break;
             case 5:
                 //Move left for 1.5 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1500)) next();
-                robot.drive.setDrive(HoloDir.LEFT, .5);
+                augustus.drive.setDrive(HoloDir.LEFT, .5);
                 break;
             case 6:
                 //Move forward/backward for .625 seconds based on Side enum
                 //next case determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 625))
                     next(side == Side.BLUE ? -7 : 7);
-                robot.drive.setDrive(side == Side.RED ? HoloDir.BACKWARD : HoloDir.FORWARD, .45);
+                augustus.drive.setDrive(side == Side.RED ? HoloDir.BACKWARD : HoloDir.FORWARD, .45);
                 break;
             case -7:
                 //turn for 1.96 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1960)) next(7);
-                robot.drive.setAllDrive(0.5);
+                augustus.drive.setAllDrive(0.5);
                 break;
             case 7:
                 //Slide elevator out until the position is at the Stopped position
-                if(robot.elevator.xPos == ElevatorXPos.STOPPED) next();
-                robot.elevator.out(false);
+                if(augustus.elevator.xPos == ElevatorXPos.STOPPED) next();
+                augustus.elevator.out(false);
                 break;
             case 8:
                 //2 second pause
@@ -104,8 +110,8 @@ public class MediumAutonomous extends Handler {
                 break;
             case 9:
                 //Release the claw until its in the stopped claw position
-                if(((JClaw)robot.elevator.claw).p == ClawPos.STOPPED) next();
-                robot.elevator.claw.release(false);
+                if(((JClaw)augustus.elevator.claw).p == ClawPos.STOPPED) next();
+                augustus.elevator.claw.release(false);
                 break;
             case 10:
                 //2.5 second pause
@@ -114,32 +120,32 @@ public class MediumAutonomous extends Handler {
             case 11:
                 //move elevator up for .5 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                robot.elevator.up();
+                augustus.elevator.up();
                 break;
             case 12:
                 //turn for .98 seconds and stop vertical movement of the Elevator
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 980)) next();
-                robot.elevator.stopVert();
-                robot.drive.setAllDrive(0.5);
+                augustus.elevator.stopVert();
+                augustus.drive.setAllDrive(0.5);
                 break;
             case 13:
                 //Move left for 1.6 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1600)) next();
-                robot.drive.setDrive(HoloDir.LEFT, 0.8);
+                augustus.drive.setDrive(HoloDir.LEFT, 0.8);
                 break;
             case 14:
                 //move right for .5 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                robot.drive.setDrive(HoloDir.RIGHT, 0.5);
+                augustus.drive.setDrive(HoloDir.RIGHT, 0.5);
                 break;
             case 15:
                 //move elevator down for .5 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                robot.elevator.down();
+                augustus.elevator.down();
                 break;
             case 16:
                 //Stop vertical movement of elevator
-                robot.elevator.stopVert();
+                augustus.elevator.stopVert();
                 next();
                 break;
             default:
@@ -153,18 +159,23 @@ public class MediumAutonomous extends Handler {
      * Autonomous for the closer two balancing stones
      */
     public void Near() {
-        if (!handler.started) handler.start();
+
+        if(!handler.started){
+            start();
+            augustus = (RobotAugustus)robot;
+        }
+
         switch (state) {
             case 0:
                 // Extend the knocker
                 if(handler.runTime.milliseconds() >= 1500) next();
-                robot.knocker.out();
+                augustus.knocker.out();
                 break;
             case 1:
                 // Detect the color of the Jewel and determine which case to move to
                 // based on what the color sensor sees and the Side enum
-                if((side == Side.BLUE && robot.knocker.colorRangeSensor.isRed())
-                        || (side == Side.RED && !robot.knocker.colorRangeSensor.isRed()))
+                if((side == Side.BLUE && augustus.knocker.colorRangeSensor.isRed())
+                        || (side == Side.RED && !augustus.knocker.colorRangeSensor.isRed()))
                     next(side == Side.RED ? -2 : 2);
                 else
                     next(side == Side.RED ? 2 : -2);
@@ -172,39 +183,39 @@ public class MediumAutonomous extends Handler {
             case -2:
                 //Turn for 2 seconds, direction determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 2000)) next(-3);
-                robot.drive.setAllDrive(side == Side.RED ? .05 : -.05);
+                augustus.drive.setAllDrive(side == Side.RED ? .05 : -.05);
                 break;
             case -3:
                 //retract knocker and turn for 2 seconds, direction determined by Side enum
-                robot.knocker.in();
+                augustus.knocker.in();
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 2000)) next(4);
-                robot.drive.setAllDrive(side == Side.RED ? -.05 : .05);
+                augustus.drive.setAllDrive(side == Side.RED ? -.05 : .05);
                 break;
             case 2:
                 //Turn for 1 second, direction determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1000)) next(3);
-                robot.drive.setAllDrive(side == Side.RED ? -0.05 : 0.05);
+                augustus.drive.setAllDrive(side == Side.RED ? -0.05 : 0.05);
                 break;
             case 3:
                 //Pull the knocker in and turn, direction determined by Side enum
-                robot.knocker.in();
-                robot.drive.setAllDrive(side == Side.RED ? 0.05 : -0.05);
+                augustus.knocker.in();
+                augustus.drive.setAllDrive(side == Side.RED ? 0.05 : -0.05);
                 next();
                 break;
             case 4:
                 //Drive forward/backwards for 2.8 sections, direction determined by Side enum
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 2800)) next();
-                robot.drive.setDrive(side == Side.RED ? HoloDir.FORWARD : HoloDir.BACKWARD, .5);
+                augustus.drive.setDrive(side == Side.RED ? HoloDir.FORWARD : HoloDir.BACKWARD, .5);
                 break;
             case 5:
                 //turn for .98 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 980)) next();
-                robot.drive.setAllDrive(0.5);
+                augustus.drive.setAllDrive(0.5);
                 break;
             case 6:
                 //move elevator out until it is in the STOPPED position
-                if(robot.elevator.xPos == ElevatorXPos.STOPPED) next();
-                robot.elevator.out(false);
+                if(augustus.elevator.xPos == ElevatorXPos.STOPPED) next();
+                augustus.elevator.out(false);
                 break;
             case 7:
                 //Pause for 2 seconds
@@ -212,8 +223,8 @@ public class MediumAutonomous extends Handler {
                 break;
             case 8:
                 //open Claw until it is in the STOPPED position
-                if(((JClaw)robot.elevator.claw).p == ClawPos.STOPPED) next();
-                robot.elevator.claw.release(false);
+                if(((JClaw)augustus.elevator.claw).p == ClawPos.STOPPED) next();
+                augustus.elevator.claw.release(false);
                 break;
             case 9:
                 //2.5 second pause
@@ -222,23 +233,23 @@ public class MediumAutonomous extends Handler {
             case 10:
                 //Drive backwards for 1 second
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1000)) next();
-                robot.drive.setDrive(HoloDir.BACKWARD, 0.5);
+                augustus.drive.setDrive(HoloDir.BACKWARD, 0.5);
                 break;
             case 11:
                 //turn for 1.08 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1080)) next();
-                robot.drive.setAllDrive(0.5);
+                augustus.drive.setAllDrive(0.5);
                 break;
             case 12:
                 //Move left for 1.6 seconds
                 //slam Glyph into Cryptobox
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 1600)) next();
-                robot.drive.setDrive(HoloDir.LEFT, 0.8);
+                augustus.drive.setDrive(HoloDir.LEFT, 0.8);
                 break;
             case 13:
                 //Move right for .5 seconds
                 if(handler.runTime.milliseconds() >= (handler.lastTick + 500)) next();
-                robot.drive.setDrive(HoloDir.RIGHT, 0.5);
+                augustus.drive.setDrive(HoloDir.RIGHT, 0.5);
                 break;
             default:
                 //Stop robot if the next case can not be found

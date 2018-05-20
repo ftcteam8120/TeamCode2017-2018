@@ -5,23 +5,23 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Augustus.ClawType;
-import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
-import org.firstinspires.ftc.teamcode.Augustus.Robot;
+import org.firstinspires.ftc.teamcode.HoloDir;
+import org.firstinspires.ftc.teamcode.Augustus.RobotAugustus;
 
 
 import static org.firstinspires.ftc.teamcode.QuickMaths.normalize;
 
-//The class controls the TeleOp of our Robot
+//The class controls the TeleOp of our RobotNero
 @TeleOp(name = "AugustusDrive", group = "Augustus")
 public class AugustusDrive extends OpMode
 {
-    //The robot being used in this class
-    Robot augustus;
+    //The robotAugustus being used in this class
+    RobotAugustus augustus;
 
     //What occurs when AugustusDrive is initted
     @Override
     public void init() {
-        augustus = new Robot();
+        augustus = new RobotAugustus();
         augustus.init(hardwareMap, ClawType.J);
     }
 
@@ -31,9 +31,9 @@ public class AugustusDrive extends OpMode
     double h;
     //The angle computed by v and h
     double angle;
-    //The power which the robot turns at
+    //The power which the robotAugustus turns at
     double rotate;
-    //The power that the motors are set to when the robot drives
+    //The power that the motors are set to when the robotAugustus drives
     double speed;
     //The adjustable speed which allows for a "slowed down" mode of driving
     double holoSpeed;
@@ -56,19 +56,20 @@ public class AugustusDrive extends OpMode
     /**
      * Control output of drivetrain.
      *
-     * Stop robot when b is pressed.
+     * Stop robotAugustus when b is pressed.
      *
-     * Set speed for robot based on right trigger.
+     * Set speed for robotAugustus based on right trigger.
      *
-     * Get variables for robot direction.
+     * Get variables for robotAugustus direction.
      *
-     * Move robot based on gamepad input.
+     * Move robotAugustus based on gamepad input.
      *
      * @param gamepad gamepad used for controlling drivetrain components.
      */
     public void updateDriver(Gamepad gamepad) {
 
         //control of knocker
+        /*
         if(gamepad.a)
             augustus.knocker.out();
         else if(gamepad.b)
@@ -77,6 +78,7 @@ public class AugustusDrive extends OpMode
             augustus.knocker.left();
         else if(gamepad.y)
             augustus.knocker.right();
+        */
 
         // Adjust "safe" perpendicular speed
         if(gamepad.right_trigger > 0)
@@ -177,6 +179,7 @@ public class AugustusDrive extends OpMode
             augustus.elevator.claw.stop();
         }
 
+        /*
         //control of the ability to flip relic grabber over field perimeter
         if(gamepad.y)
             augustus.grabber.flipUp();
@@ -196,6 +199,7 @@ public class AugustusDrive extends OpMode
             augustus.grabber.grab();
         else if(gamepad.b)
             augustus.grabber.release();
+        */
 
         // Check if elevator motor should be on
         // Negative is down and positive is up

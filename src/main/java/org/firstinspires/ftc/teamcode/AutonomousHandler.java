@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.Augustus;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Augustus.RobotAugustus;
 
 public class AutonomousHandler {
 
@@ -69,48 +70,6 @@ public class AutonomousHandler {
         state++;
         robot.stop();
         lastTick = runTime.milliseconds();
-    }
-
-    /**
-     * Run each motor for one second to test them in the proper A B C D order.
-     *
-     * Case 0: runs motor A for 1 second.
-     *
-     * Case 1: runs motor B for 1 second.
-     *
-     * Case 2: runs motor C for 1 second.
-     *
-     * Case 3: runs motor D for 1 second.
-     *
-     * Case 4: stops robot.
-     *
-     * @param speed the speed at which all motors are run at.
-     */
-    public void motorTest(double speed)
-    {
-        if(!started) start();
-        switch(state)
-        {
-            case 0:
-                if(runTime.seconds() > 1) state++;
-                robot.drive.a.setPower(speed);
-                break;
-            case 1:
-                if(runTime.seconds() > 2) state++;
-                robot.drive.b.setPower(speed);
-                break;
-            case 2:
-                if(runTime.seconds() > 3) state++;
-                robot.drive.c.setPower(speed);
-                break;
-            case 3:
-                if(runTime.seconds() > 4) state++;
-                robot.drive.d.setPower(speed);
-                break;
-            case 4:
-                robot.stop();
-                break;
-        }
     }
 
     public void update() {

@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Augustus.HoloDir;
-import org.firstinspires.ftc.teamcode.Augustus.SmartMotor;
 
 import static org.firstinspires.ftc.teamcode.QuickMaths.*;
 

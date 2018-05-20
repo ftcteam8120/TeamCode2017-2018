@@ -1,17 +1,17 @@
 package org.firstinspires.ftc.teamcode.Augustus.Autonomous.Handlers;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Augustus.Handler;
-import org.firstinspires.ftc.teamcode.Augustus.Section;
-import org.firstinspires.ftc.teamcode.Augustus.Side;
+import org.firstinspires.ftc.teamcode.Augustus.RobotAugustus;
+import org.firstinspires.ftc.teamcode.Handler;
+import org.firstinspires.ftc.teamcode.Section;
+import org.firstinspires.ftc.teamcode.Side;
 
 public class BasicAutonomous extends Handler {
 
     private double WHEEL_SPEED;
 
-    /*
-     * Constructor
-     */
+    RobotAugustus augustus;
+
     public BasicAutonomous(double speed) {
         super();
         WHEEL_SPEED = speed;
@@ -22,42 +22,45 @@ public class BasicAutonomous extends Handler {
      */
     public void Far()
     {
-        if(!handler.started) start();
+        if(!handler.started){
+            start();
+            augustus = (RobotAugustus)robot;
+        }
 
         switch (state) {
             case 0:
                 //Drop knocker and wait .5 seconds
-                robot.knocker.out();
+                augustus.knocker.out();
                 if(pause(500)) next();
                 break;
             case 1:
                 //Determines which case to go to next based on
                 // values from the color sensor and the Side enum
-                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) ||
-                        (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
+                if((augustus.knocker.colorRangeSensor.isRed() && side == Side.BLUE) ||
+                        (!augustus.knocker.colorRangeSensor.isRed() && side == Side.RED))
                     next(-2);
                 else
                     next(2);
                 break;
             case -2:
                 //hit the jewel to the left in .5 seconds
-                robot.knocker.left();
+                augustus.knocker.left();
                 if(pause(500)) next(3);
                 break;
             case 2:
                 //hit the Jewel on the right in .5 seconds
-                robot.knocker.right();
+                augustus.knocker.right();
                 if(pause(500)) next(3);
                 break;
             case 3:
                 //retract the Knocker in .5 seconds
-                robot.knocker.center();
-                robot.knocker.in();
+                augustus.knocker.center();
+                augustus.knocker.in();
                 if(pause(500)) next();
                 break;
             default:
-                //Stop the robot if the next case can not be found
-                robot.stop();
+                //Stop the augustus if the next case can not be found
+                augustus.stop();
                 break;
         }
     }
@@ -66,42 +69,46 @@ public class BasicAutonomous extends Handler {
      * Autonomous for the closer two balancing stones
      */
     public void Near() {
-        if (!handler.started) handler.start();
+
+        if(!handler.started){
+            start();
+            augustus = (RobotAugustus)robot;
+        }
 
         switch (state) {
             case 0:
                 //Drop the Knocker in .5 seconds
-                robot.knocker.out();
+                augustus.knocker.out();
                 if(pause(500)) next();
                 break;
             case 1:
                 //Determines which case to go to next based on
                 // values from the color sensor and the Side enum
-                if((robot.knocker.colorRangeSensor.isRed() && side == Side.BLUE) ||
-                        (!robot.knocker.colorRangeSensor.isRed() && side == Side.RED))
+                if((augustus.knocker.colorRangeSensor.isRed() && side == Side.BLUE) ||
+                        (!augustus.knocker.colorRangeSensor.isRed() && side == Side.RED))
                     next(-2);
                 else
                     next(2);
                 break;
             case -2:
                 //Hit the Jewel on the left in .5 seconds
-                robot.knocker.left();
+                augustus.knocker.left();
                 if(pause(500)) next(3);
                 break;
             case 2:
                 //hit the Jewel on the right in .5 seconds
-                robot.knocker.right();
+                augustus.knocker.right();
                 if(pause(500)) next(3);
                 break;
             case 3:
                 //retract the Knocker in .5 seconds
-                robot.knocker.center();
-                robot.knocker.in();
+                augustus.knocker.center();
+                augustus.knocker.in();
                 if(pause(500)) next();
                 break;
             default:
-                //Stop the robot if the next case can't be found
-                robot.stop();
+                //Stop the augustus if the next case can't be found
+                augustus.stop();
                 break;
         }
     }
